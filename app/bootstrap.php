@@ -42,6 +42,7 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/projects.php';
 require_once __DIR__ . '/chat.php';
 require_once __DIR__ . '/knowledge.php';
+require_once __DIR__ . '/ai.php';
 
 function app_config(?string $key = null): mixed
 {
