@@ -1,0 +1,20 @@
+/* Admin shell rail polish. Loaded by app/admin_shell.php. */
+.admin-layout{grid-template-columns:50px minmax(0,1fr)!important}
+.admin-sidebar{width:50px!important;padding:10px 7px!important;transition:width .2s ease,box-shadow .2s ease!important}
+.admin-sidebar:hover,.admin-sidebar.is-open{width:228px!important;box-shadow:18px 0 48px rgba(15,23,42,.08)}
+.admin-nav-link,.admin-nav-parent{width:36px!important;height:40px!important;justify-content:flex-start!important;padding:0 10px!important;overflow:hidden!important;transition:width .2s ease!important}
+.admin-sidebar:hover .admin-nav-link,.admin-sidebar:hover .admin-nav-parent,.admin-sidebar.is-open .admin-nav-link,.admin-sidebar.is-open .admin-nav-parent{width:214px!important}
+.nav-left{display:flex;align-items:center;gap:13px;white-space:nowrap}
+.admin-nav-link i,.admin-nav-parent i{min-width:16px;text-align:center}
+.admin-nav-link em,.admin-nav-parent em{display:inline!important;font-style:normal!important;opacity:0;font-size:12px;font-weight:800;transition:opacity .12s ease}
+.admin-sidebar:hover em,.admin-sidebar.is-open em{opacity:1}
+.admin-nav-parent b{display:none!important;margin-left:auto}
+.admin-sidebar:hover .admin-nav-parent b,.admin-sidebar.is-open .admin-nav-parent b{display:block!important}
+.admin-subnav{left:52px!important}
+@media(max-width:900px){
+  .admin-sidebar{width:260px!important}
+  .admin-sidebar.is-open{width:260px!important}
+  .admin-nav-link,.admin-nav-parent,.admin-sidebar:hover .admin-nav-link,.admin-sidebar:hover .admin-nav-parent{width:100%!important;justify-content:flex-start!important;padding:0 14px!important;gap:12px!important}
+  .admin-nav-link em,.admin-nav-parent em{opacity:1!important}
+  .admin-nav-parent b{display:block!important;margin-left:auto}
+}
