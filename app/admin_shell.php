@@ -104,7 +104,7 @@ function admin_shell_open(string $title, string $kicker, string $heading, string
 
 function admin_shell_close(): void
 {
-    echo '</main></div><script>' . admin_shell_js() . '</script></body></html>';
+    echo '</main></div><script>' . admin_shell_js() . '</script><script src="/assets/admin-chat-notifications.js" defer></script></body></html>';
 }
 
 function admin_shell_css(): string
