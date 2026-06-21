@@ -2,10 +2,27 @@
 require_once __DIR__ . '/app/bootstrap.php';
 $submitted = false;
 $error = null;
+$projectTypes = ['Landing page','Website','Branded community','Questionnaire system','CRM dashboard','AI workflow','Digital products'];
+$services = ['Simple websites and landing pages','Agentic ebook and digital product workflow','Facebook and Instagram content management','Canva graphics and visual content','Agentic email management integrations','Online sales funnel setup and support','AI productivity systems'];
+$goals = ['Generate leads','Sell products','Automate workflow','Improve branding','Launch a new project','Build a private community'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
-        create_project_request($_POST);
+        create_project_request([
+            'full_name' => $_POST['full_name'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'phone' => $_POST['phone'] ?? '',
+            'company' => $_POST['company'] ?? '',
+            'project_types' => $_POST['project_types'] ?? [],
+            'services' => $_POST['services'] ?? [],
+            'primary_goal' => $_POST['primary_goal'] ?? '',
+            'budget_range' => $_POST['budget_range'] ?? '',
+            'target_timeline' => $_POST['target_timeline'] ?? '',
+            'website_url' => $_POST['website_url'] ?? '',
+            'brand_assets_url' => $_POST['brand_assets_url'] ?? '',
+            'social_links' => $_POST['social_links'] ?? '',
+            'notes' => $_POST['notes'] ?? '',
+        ]);
         $submitted = true;
     } catch (Throwable $e) {
         $error = 'Please check the form and try again.';
@@ -18,17 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Questions Agent | David Evans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff,#f8faff 60%,#fff);font-family:Inter,system-ui,sans-serif;color:#111827}.wrap{width:min(1180px,calc(100% - 56px));margin:auto}.top{height:76px;border-bottom:1px solid #eef2f7;background:#fff;position:sticky;top:0;z-index:5}.top .wrap{height:76px;display:flex;align-items:center;justify-content:space-between}.logo{font-size:34px;font-weight:900;letter-spacing:-.12em;text-decoration:none;color:#111827}.logo span{color:#2f68ff}.nav{display:flex;gap:28px;align-items:center;font-size:12px;font-weight:800}.nav a{text-decoration:none;color:#111827}.nav .cta,.btn{border:0;border-radius:999px;background:linear-gradient(135deg,#4c82ff,#2162ff);color:#fff!important;min-height:46px;padding:0 22px;display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;box-shadow:0 16px 34px rgba(47,104,255,.25);cursor:pointer}.hero{padding:72px 0 44px}.kicker{color:#2f68ff;font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:18px}h1{font-size:clamp(44px,6vw,74px);line-height:1.04;letter-spacing:-.065em;margin:0;max-width:820px}.script{font-family:Caveat,cursive;color:#2f68ff;font-size:1.16em;position:relative}.script:after{content:'';position:absolute;left:4px;right:0;bottom:6px;height:4px;background:#2f68ff;border-radius:999px}.lead{max-width:640px;color:#667085;font-size:16px;line-height:1.75;margin:26px 0 0}.notice,.error{padding:18px 22px;border-radius:14px;margin-bottom:22px;font-weight:700}.notice{background:#ecfdf5;color:#065f46}.error{background:#fef2f2;color:#991b1b}.layout{display:grid;grid-template-columns:250px 1fr 280px;gap:28px;align-items:start;padding-bottom:80px}.panel{background:#fff;border:1px solid #edf0f6;border-radius:18px;box-shadow:0 22px 70px rgba(20,33,61,.08)}.pad{padding:28px}.steps{display:grid;gap:21px}.step{display:grid;grid-template-columns:20px 1fr;gap:12px}.dot{width:17px;height:17px;border:2px solid #cbd5e1;border-radius:999px}.active .dot{background:#2f68ff;border-color:#2f68ff;box-shadow:0 0 0 6px #eef4ff}.step strong{display:block;font-size:11px;text-transform:uppercase}.step span{color:#667085;font-size:13px}.stack{display:grid;gap:18px}.card{padding:28px}.head{display:flex;gap:14px;margin-bottom:20px}.num{color:#2f68ff;font-weight:900}.head h2{font-size:20px;margin:0}.hint{font-size:13px;color:#667085;margin:6px 0 0}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.choice input{position:absolute;opacity:0}.choice span{display:flex;align-items:center;min-height:48px;border:1px solid #dfe5ef;border-radius:10px;padding:0 14px;font-size:13px;font-weight:650}.choice input:checked+span{border-color:#2f68ff;color:#2f68ff;box-shadow:0 0 0 3px #eef4ff}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:7px}.field label{font-size:12px;color:#667085;font-weight:800}.input,.select,textarea{width:100%;border:1px solid #dfe5ef;border-radius:10px;background:#fff;padding:14px 15px;font:inherit}.full{grid-column:1/-1}textarea{min-height:120px}.side-step{padding:18px 0;border-bottom:1px solid #edf0f6}.side-step:last-child{border:0}.side-step strong{display:block}.side-step p{color:#667085;line-height:1.55}.secure{margin-top:20px;background:#07101e;color:#fff;border-radius:18px;padding:26px}.secure p{color:rgba(255,255,255,.72)}.submit{margin:28px auto 70px;background:#07101e;color:#fff;border-radius:20px;padding:44px 52px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;box-shadow:0 28px 90px rgba(0,0,0,.22)}.submit h2{font-size:40px;margin:0;letter-spacing:-.055em}.submit p{color:rgba(255,255,255,.74)}.foot{background:#07101e;color:#9aa4b5;padding:28px 0;font-size:12px}.foot .wrap{display:flex;justify-content:space-between}@media(max-width:980px){.layout,.submit{grid-template-columns:1fr}.progress,.side{display:none}.choices{grid-template-columns:1fr 1fr}}@media(max-width:680px){.wrap{width:min(100% - 28px,1180px)}.nav a:not(.cta){display:none}.choices,.fields{grid-template-columns:1fr}.card{padding:22px}.submit{padding:32px 24px}.submit h2{font-size:31px}.foot .wrap{display:grid;gap:12px}}
+</style>
 </head>
 <body>
-<h1>Project Questions Agent</h1>
-<?php if ($submitted): ?><p>Your project questions were submitted.</p><?php endif; ?>
-<?php if ($error): ?><p><?= e($error) ?></p><?php endif; ?>
-<form method="post">
-<?= csrf_field() ?>
-<label>Name <input name="full_name" required></label>
-<label>Email <input name="email" type="email" required></label>
-<label>Project notes <textarea name="notes"></textarea></label>
-<button type="submit">Submit Project Questions</button>
-</form>
-</body>
-</html>
+<header class="top"><div class="wrap"><a class="logo" href="index.html">D<span>E</span></a><nav class="nav"><a href="index.html">Home</a><a href="index.html#services">Services</a><a href="index.html#portfolio">Work</a><a class="cta" href="#questions">Start A Project →</a></nav></div></header>
+<main><section class="hero"><div class="wrap"><div class="kicker">Start A Project</div><h1>Tell me what you're building with <span class="script">clarity.</span></h1><p class="lead">Answer a few guided questions so I can understand your goals, the services you need, your timeline, and the best next steps.</p></div></section>
+<?php if ($submitted): ?><div class="wrap"><div class="notice">Your project questions were submitted. I will review them and follow up with next steps.</div></div><?php endif; ?>
+<?php if ($error): ?><div class="wrap"><div class="error"><?= e($error) ?></div></div><?php endif; ?>
+<form method="post" id="questions" class="layout wrap" novalidate><?= csrf_field() ?><aside class="panel pad progress"><h3>Your progress</h3><div class="steps"><div class="step active"><div class="dot"></div><div><strong>Step 1</strong><span>Project basics</span></div></div><div class="step"><div class="dot"></div><div><strong>Step 2</strong><span>Services and goals</span></div></div><div class="step"><div class="dot"></div><div><strong>Step 3</strong><span>Timeline and budget</span></div></div><div class="step"><div class="dot"></div><div><strong>Step 4</strong><span>Brand links</span></div></div></div></aside><section class="stack">
+<div class="panel card"><div class="head"><div class="num">01</div><div><h2>What are you building?</h2><p class="hint">Select all that apply.</p></div></div><div class="choices"><?php foreach ($projectTypes as $item): ?><label class="choice"><input type="checkbox" name="project_types[]" value="<?= e($item) ?>"><span><?= e($item) ?></span></label><?php endforeach; ?></div></div>
+<div class="panel card"><div class="head"><div class="num">02</div><div><h2>Which services do you need?</h2><p class="hint">Select all that apply.</p></div></div><div class="choices"><?php foreach ($services as $item): ?><label class="choice"><input type="checkbox" name="services[]" value="<?= e($item) ?>"><span><?= e($item) ?></span></label><?php endforeach; ?></div></div>
+<div class="panel card"><div class="head"><div class="num">03</div><div><h2>What is your goal?</h2><p class="hint">Choose your primary goal.</p></div></div><div class="choices"><?php foreach ($goals as $item): ?><label class="choice"><input type="radio" name="primary_goal" value="<?= e($item) ?>"><span><?= e($item) ?></span></label><?php endforeach; ?></div></div>
+<div class="panel card"><div class="head"><div class="num">04</div><div><h2>Budget and timeline</h2><p class="hint">Tell me your current range and target timeline.</p></div></div><div class="fields"><div class="field"><label>Budget range</label><select class="select" name="budget_range"><option value="">Select one</option><option>$1,000 - $2,500</option><option>$2,500 - $5,000</option><option>$5,000 - $10,000</option><option>$10,000+</option><option>Not sure yet</option></select></div><div class="field"><label>Target timeline</label><select class="select" name="target_timeline"><option value="">Select one</option><option>1 - 2 weeks</option><option>3 - 4 weeks</option><option>4 - 6 weeks</option><option>2 - 3 months</option><option>Flexible</option></select></div></div></div>
+<div class="panel card"><div class="head"><div class="num">05</div><div><h2>Brand links and contact</h2><p class="hint">Where should I follow up?</p></div></div><div class="fields"><div class="field"><label>Your name</label><input class="input" name="full_name" required></div><div class="field"><label>Email</label><input class="input" type="email" name="email" required></div><div class="field"><label>Phone</label><input class="input" name="phone"></div><div class="field"><label>Company / project</label><input class="input" name="company"></div><div class="field"><label>Website URL</label><input class="input" name="website_url" placeholder="https://"></div><div class="field"><label>Brand assets link</label><input class="input" name="brand_assets_url"></div><div class="field full"><label>Social links</label><input class="input" name="social_links"></div><div class="field full"><label>Additional notes</label><textarea name="notes"></textarea></div></div></div></section><aside class="side"><div class="panel pad"><h3>What happens next</h3><div class="side-step"><strong>1. Review your answers</strong><p>I analyze your details and goals.</p></div><div class="side-step"><strong>2. Recommend next steps</strong><p>You receive a tailored plan.</p></div><div class="side-step"><strong>3. Start the build</strong><p>Once approved, I get to work.</p></div></div><div class="secure"><strong>Private and secure</strong><p>Your information is stored in the CRM foundation and reviewed only for your project.</p></div></aside><div class="submit"><div><h2>Ready when <span class="script">you</span> are.</h2><p>Submit your answers and I will review everything and send back the best next steps.</p></div><button class="btn" type="submit">Submit Project Questions →</button></div></form></main><footer class="foot"><div class="wrap"><div>© 2026 David Evans.</div><a href="index.html">Back to portfolio</a></div></footer></body></html>
