@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>David Evans | AI Integrated Solutions</title>
+<meta name="description" content="David Evans builds AI-integrated websites, landing pages, branded communities, questionnaire systems, and admin/CRM dashboards for creators, artists, bands, and small businesses." />
+<style>
+:root{
+  --dark:#050712;
+  --dark2:#0a1020;
+  --ink:#0f172a;
+  --muted:#667085;
+  --muted-dark:#94a3b8;
+  --line:#e5e7eb;
+  --line-dark:rgba(255,255,255,.13);
+  --white:#ffffff;
+  --soft:#f8fafc;
+  --blue:#2563eb;
+  --blue2:#60a5fa;
+  --cyan:#7dd3fc;
+  --violet:#8b5cf6;
+  --green:#22c55e;
+  --radius:28px;
+  --shadow:0 28px 90px rgba(15,23,42,.16);
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color:var(--ink);
+  background:var(--soft);
+  overflow-x:hidden;
+  font-size:13px;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{width:min(var(--max), calc(100% - 40px));margin:0 auto}
+.nav{
+  position:fixed;
+  inset:0 0 auto 0;
+  z-index:50;
+  height:76px;
+  color:#fff;
+  background:linear-gradient(to bottom, rgba(5,7,18,.82), rgba(5,7,18,.25));
+  backdrop-filter:blur(18px);
+}
+.nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+.brand{display:flex;align-items:center;gap:14px;min-width:220px}
+.brand img{width:74px;height:auto}
+.brand-text strong{display:block;font-size:15px;letter-spacing:.14em;text-transform:uppercase;line-height:1}
+.brand-text span{display:block;margin-top:7px;color:var(--muted-dark);font-size:10px;letter-spacing:.22em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:26px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.nav-links a{color:rgba(255,255,255,.78);transition:.2s ease}
+.nav-links a:hover{color:#fff}
+.nav-btn{padding:13px 18px;border-radius:999px;background:linear-gradient(135deg, var(--blue), var(--blue2));color:#fff!important;box-shadow:0 18px 42px rgba(37,99,235,.28)}
+.hero{
+  position:relative;
+  min-height:870px;
+  overflow:hidden;
+  background:#050712;
+  color:#fff;
+}
+#mesh{position:absolute;inset:0;width:100%;height:100%;opacity:.56}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 18% 35%, rgba(37,99,235,.24), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(125,211,252,.16), transparent 30%),
+    linear-gradient(90deg, rgba(5,7,18,.96) 0%, rgba(5,7,18,.88) 38%, rgba(5,7,18,.28) 72%, rgba(5,7,18,.08) 100%);
+  z-index:1;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:170px;
+  background:linear-gradient(to top, rgba(248,250,252,1), rgba(248,250,252,0));
+  z-index:2;
+}
+.hero-inner{position:relative;z-index:3;display:grid;grid-template-columns:1fr .9fr;align-items:center;gap:46px;padding:142px 0 130px}
+.hero-copy{max-width:610px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#3b82f6;font-weight:900;margin-bottom:24px}
+h1{font-size:clamp(54px, 7vw, 92px);line-height:.92;letter-spacing:-.075em;margin:0 0 26px;font-weight:900}
+h1 .script{font-style:italic;color:#3b82f6;font-weight:500;position:relative;display:inline-block}
+h1 .script:after{content:"";position:absolute;left:4px;right:0;bottom:6px;height:4px;background:#3b82f6;border-radius:999px;transform:rotate(-2deg)}
+.hero-copy p{color:#d5dbe8;font-size:16px;line-height:1.75;max-width:520px;margin:0}
+.hero-actions{display:flex;align-items:center;gap:20px;margin-top:46px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:50px;padding:0 24px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;transition:.2s ease;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg, var(--blue), var(--blue2));color:#fff;box-shadow:0 22px 48px rgba(37,99,235,.34)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 28px 58px rgba(37,99,235,.44)}
+.btn-play{background:transparent;color:#fff;border-color:rgba(255,255,255,.22)}
+.btn-play:before{content:"▶";width:38px;height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.36);display:grid;place-items:center;font-size:11px;padding-left:2px}
+.hero-card{position:relative;min-height:680px;display:flex;align-items:flex-end;justify-content:center}
+.hero-card img{width:min(620px, 100%);border-radius:42px;box-shadow:0 40px 110px rgba(0,0,0,.48);border:1px solid rgba(255,255,255,.1)}
+.hero-chip{position:absolute;left:0;bottom:88px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(18px);border-radius:24px;padding:18px 20px;box-shadow:0 22px 60px rgba(0,0,0,.28)}
+.hero-chip small{display:block;color:var(--cyan);font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}.hero-chip strong{display:block;font-size:26px;line-height:1}
+.logo-slider{position:relative;z-index:5;margin-top:-56px;background:#fff;border-bottom:1px solid #eef2f7;box-shadow:0 -20px 60px rgba(15,23,42,.08)}
+.slider-inner{padding:30px 0 28px;text-align:center;overflow:hidden}.slider-label{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px}.logo-track{display:flex;width:max-content;animation:slideLogos 28s linear infinite;gap:26px}.logo-slider:hover .logo-track{animation-play-state:paused}.logo-set{display:flex;align-items:center;gap:26px;padding-right:26px}.logo-card{display:flex;align-items:center;justify-content:center;min-width:230px;height:70px;border:1px solid #dbeafe;border-radius:18px;background:#fff;color:#0f172a;font-size:15px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 16px 30px rgba(15,23,42,.05)}.logo-card span{color:#64748b;margin-left:8px;font-size:10px;letter-spacing:.12em}@keyframes slideLogos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.section{padding:112px 0}.section-head{display:grid;grid-template-columns:.82fr 1fr;gap:48px;align-items:end;margin-bottom:42px}.kicker{font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}.section h2{font-size:clamp(36px, 5vw, 62px);line-height:.98;letter-spacing:-.06em;margin:0}.lead{font-size:15px;line-height:1.82;color:var(--muted);margin:0;max-width:650px}.grid{display:grid;gap:18px}.services-grid{grid-template-columns:repeat(4, 1fr)}.card{background:#fff;border:1px solid #e5e7eb;border-radius:var(--radius);padding:26px;box-shadow:0 22px 60px rgba(15,23,42,.06);position:relative;overflow:hidden}.card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%, rgba(37,99,235,.10), transparent 34%);opacity:0;transition:.25s ease}.card:hover:before{opacity:1}.icon{position:relative;width:46px;height:46px;border-radius:16px;background:#eff6ff;color:var(--blue);display:grid;place-items:center;font-weight:900;margin-bottom:30px}.card h3{position:relative;font-size:18px;letter-spacing:-.025em;margin:0 0 13px}.card p{position:relative;color:var(--muted);line-height:1.72;margin:0;font-size:13px}.tags{position:relative;display:flex;gap:7px;flex-wrap:wrap;margin-top:22px}.tag{font-size:9px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;border:1px solid #e5e7eb;border-radius:999px;padding:6px 8px;color:#64748b;background:#f8fafc}.portfolio{background:#f1f5f9}.portfolio-grid{grid-template-columns:repeat(4,1fr)}.work-card{min-height:300px;display:flex;flex-direction:column;justify-content:space-between}.work-card .domain{font-size:10px;font-weight:900;letter-spacing:.17em;text-transform:uppercase;color:#64748b}.work-card h3{font-size:28px;letter-spacing:-.05em}.work-card a{position:relative;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e5e7eb;padding-top:20px;margin-top:36px;color:var(--blue);font-size:11px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}.build-preview{grid-template-columns:1fr 1fr;align-items:center}.preview-card{padding:0;overflow:hidden}.preview-card img{width:100%;height:auto}.dark-band{background:#050712;color:#fff;position:relative;overflow:hidden}.dark-band:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 22%, rgba(37,99,235,.24), transparent 30%),radial-gradient(circle at 82% 62%, rgba(139,92,246,.20), transparent 34%)}.dark-band .container{position:relative;z-index:2}.dark-band .lead,.dark-band .card p{color:#aab4c4}.dark-band .card{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);box-shadow:none}.process-grid{grid-template-columns:repeat(3,1fr)}.num{font-size:44px;line-height:1;color:rgba(37,99,235,.22);font-weight:900;letter-spacing:-.08em;margin-bottom:32px}.cta{padding:116px 0 120px;background:#fff}.cta-panel{border-radius:42px;background:#050712;color:#fff;padding:56px;position:relative;overflow:hidden;box-shadow:0 30px 90px rgba(15,23,42,.22)}.cta-panel:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 10%, rgba(96,165,250,.36), transparent 32%),radial-gradient(circle at 80% 50%, rgba(139,92,246,.28), transparent 36%)}.cta-content{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}.cta h2{font-size:clamp(38px, 5vw, 72px);line-height:.94;letter-spacing:-.07em;margin:0}.cta p{color:#cbd5e1;line-height:1.78;font-size:15px;max-width:700px;margin:22px 0 0}.footer{background:#050712;color:#94a3b8;border-top:1px solid rgba(255,255,255,.1);padding:34px 0}.footer-inner{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;font-size:11px}.footer-links{display:flex;gap:18px;flex-wrap:wrap}.footer a:hover{color:#fff}.reveal{opacity:0;transform:translateY(18px);transition:.7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:980px){.nav-links{display:none}.hero{min-height:auto}.hero-inner,.section-head,.build-preview,.cta-content{grid-template-columns:1fr}.hero-inner{padding:118px 0 92px}.hero-card{min-height:auto}.hero-chip{left:18px;bottom:36px}.services-grid,.portfolio-grid,.process-grid{grid-template-columns:1fr 1fr}.section{padding:84px 0}}
+@media(max-width:640px){.container{width:min(100% - 26px, var(--max))}.nav{height:68px}.nav-inner{height:68px}.brand img{width:56px}.brand-text strong{font-size:12px}.brand-text span{font-size:8px}.hero-inner{padding-top:104px}h1{font-size:48px}.hero-copy p{font-size:14px}.hero-actions{align-items:stretch;flex-direction:column}.btn{width:100%}.services-grid,.portfolio-grid,.process-grid{grid-template-columns:1fr}.logo-card{min-width:210px}.section-head{gap:20px}.cta-panel{padding:32px;border-radius:30px}.footer-inner{display:grid}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top" aria-label="David Evans home">
+      <img src="images/de-logo.svg" alt="David Evans logo" />
+      <span class="brand-text"><strong>David Evans</strong><span>AI integrated solutions</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#systems">Systems</a>
+      <a href="#process">Process</a>
+      <a class="nav-btn" href="mailto:bigriversocial74@gmail.com?subject=Project%20Inquiry">Let's Talk</a>
+    </nav>
+  </div>
+</header>
+<main id="top">
+  <section class="hero">
+    <canvas id="mesh" aria-hidden="true"></canvas>
+    <div class="container hero-inner">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">Hello, I'm David</div>
+        <h1>I build digital experiences that make an <span class="script">impact</span>.</h1>
+        <p>Freelance AI-integrated solutions, web systems, branded community platforms, questionnaire workflows, and admin/CRM dashboards for artists, bands, startups, and small businesses.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#portfolio">View my work <span>→</span></a>
+          <a class="btn btn-play" href="#systems">Watch the system</a>
+        </div>
+      </div>
+      <div class="hero-card reveal">
+        <img src="images/david-hero.svg" alt="Stylized portrait of David Evans in a collared shirt and jeans" />
+        <div class="hero-chip"><small>Available for</small><strong>AI + Web Builds</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="logo-slider" aria-label="Portfolio links">
+    <div class="container slider-inner">
+      <div class="slider-label">Explore my portfolio</div>
+      <div class="logo-track">
+        <div class="logo-set">
+          <a class="logo-card" href="https://microgifter.com" target="_blank" rel="noopener">Microgifter<span>.com</span></a>
+          <a class="logo-card" href="https://vp3.me" target="_blank" rel="noopener">VP3<span>.me</span></a>
+          <a class="logo-card" href="https://stonefellow.com" target="_blank" rel="noopener">Stonefellow<span>.com</span></a>
+          <a class="logo-card" href="https://rogerhuston.com" target="_blank" rel="noopener">RogerHuston<span>.com</span></a>
+        </div>
+        <div class="logo-set" aria-hidden="true">
+          <a class="logo-card" href="https://microgifter.com" target="_blank" rel="noopener">Microgifter<span>.com</span></a>
+          <a class="logo-card" href="https://vp3.me" target="_blank" rel="noopener">VP3<span>.me</span></a>
+          <a class="logo-card" href="https://stonefellow.com" target="_blank" rel="noopener">Stonefellow<span>.com</span></a>
+          <a class="logo-card" href="https://rogerhuston.com" target="_blank" rel="noopener">RogerHuston<span>.com</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head reveal">
+        <div><div class="kicker">Solutions</div><h2>Practical systems for creators and small teams.</h2></div>
+        <p class="lead">I focus on the bridge between design, business logic, AI workflows, and usable web tools. The work can start as a landing page, then grow into a questionnaire, customer dashboard, CRM, branded community, or product platform.</p>
+      </div>
+      <div class="grid services-grid">
+        <article class="card reveal"><div class="icon">AI</div><h3>AI workflow integration</h3><p>Structured workflows for intake, research, copy, support, content planning, lead handling, and repeatable operations.</p><div class="tags"><span class="tag">Automation</span><span class="tag">Prompt systems</span></div></article>
+        <article class="card reveal"><div class="icon">UX</div><h3>Web design and development</h3><p>Landing pages, product demos, customer portals, onboarding flows, and clean interfaces that feel modern and useful.</p><div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">PHP</span></div></article>
+        <article class="card reveal"><div class="icon">CM</div><h3>Branded online communities</h3><p>Self-managed and managed social networking solutions for artists, bands, venues, and small businesses.</p><div class="tags"><span class="tag">Members</span><span class="tag">Feeds</span><span class="tag">Groups</span></div></article>
+        <article class="card reveal"><div class="icon">CRM</div><h3>Admin and CRM dashboards</h3><p>Internal dashboards for leads, clients, project status, notes, tasks, opportunities, and customer follow-up.</p><div class="tags"><span class="tag">Pipeline</span><span class="tag">Admin</span><span class="tag">Reports</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section portfolio" id="portfolio">
+    <div class="container">
+      <div class="section-head reveal">
+        <div><div class="kicker">Portfolio</div><h2>Project links and live concepts.</h2></div>
+        <p class="lead">A mix of local commerce, AI-assisted product systems, creative direction, and web experiences. These links sit directly under the hero in the logo slider and are expanded here as project cards.</p>
+      </div>
+      <div class="grid portfolio-grid">
+        <article class="card work-card reveal"><div><div class="domain">microgifter.com</div><h3>Microgifter</h3><p>Local gifting, predictive sales, pre-sale revenue, and future demand tools for local businesses.</p></div><a href="https://microgifter.com" target="_blank" rel="noopener">Visit site <span>↗</span></a></article>
+        <article class="card work-card reveal"><div><div class="domain">vp3.me</div><h3>VP3</h3><p>Agentic product workspace concepts, guided builds, saved agents, and AI-assisted user flows.</p></div><a href="https://vp3.me" target="_blank" rel="noopener">Visit site <span>↗</span></a></article>
+        <article class="card work-card reveal"><div><div class="domain">stonefellow.com</div><h3>Stonefellow</h3><p>Brand, web, and systems direction for practical digital experiences and service presentation.</p></div><a href="https://stonefellow.com" target="_blank" rel="noopener">Visit site <span>↗</span></a></article>
+        <article class="card work-card reveal"><div><div class="domain">rogerhuston.com</div><h3>Roger Huston</h3><p>Creative portfolio and presentation work with a clean front-end experience and visual identity.</p></div><a href="https://rogerhuston.com" target="_blank" rel="noopener">Visit site <span>↗</span></a></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="systems">
+    <div class="container">
+      <div class="section-head reveal">
+        <div><div class="kicker">Next build layer</div><h2>Questionnaire intake plus admin CRM dashboard.</h2></div>
+        <p class="lead">The repo is set up so this landing page can evolve into a working intake path and internal dashboard. The next stage can add database tables, auth, questionnaire submissions, client records, and CRM status tracking.</p>
+      </div>
+      <div class="grid build-preview">
+        <article class="card preview-card reveal"><img src="images/questionnaire-preview.svg" alt="Questionnaire preview interface" /></article>
+        <article class="card preview-card reveal"><img src="images/dashboard-preview.svg" alt="Admin CRM dashboard preview interface" /></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark-band" id="process">
+    <div class="container">
+      <div class="section-head reveal">
+        <div><div class="kicker">Process</div><h2>Design it. Build it. Connect it.</h2></div>
+        <p class="lead">The approach is intentionally simple: define the offer and audience, mock up the system, build the first version, then connect the operational pieces that help you manage leads, customers, members, and follow-up.</p>
+      </div>
+      <div class="grid process-grid">
+        <article class="card reveal"><div class="num">01</div><h3>Map the offer</h3><p>Clarify what the visitor needs to understand, what action they should take, and what information the business needs to collect.</p></article>
+        <article class="card reveal"><div class="num">02</div><h3>Build the front-end</h3><p>Create the landing page, portfolio, questionnaire path, community entry, or product demo with strong visual direction.</p></article>
+        <article class="card reveal"><div class="num">03</div><h3>Wire the system</h3><p>Add admin views, CRM records, statuses, email flows, AI support steps, and reporting that makes the build useful.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="container">
+      <div class="cta-panel reveal">
+        <div class="cta-content">
+          <div><div class="kicker">Start a build</div><h2>Need a landing page, AI workflow, community, or CRM system?</h2><p>Send the idea, offer, website, or workflow. I can help shape it into a clean first version and build the system around it.</p></div>
+          <a class="btn btn-primary" href="mailto:bigriversocial74@gmail.com?subject=Project%20Inquiry">Contact David</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>© 2026 David Evans. AI integrated solutions, web systems, and consulting.</div>
+    <div class="footer-links"><a href="https://microgifter.com" target="_blank" rel="noopener">Microgifter</a><a href="https://vp3.me" target="_blank" rel="noopener">VP3</a><a href="https://stonefellow.com" target="_blank" rel="noopener">Stonefellow</a><a href="https://rogerhuston.com" target="_blank" rel="noopener">Roger Huston</a></div>
+  </div>
+</footer>
+<script>
+(function(){
+  const canvas=document.getElementById('mesh');
+  const ctx=canvas.getContext('2d');
+  let points=[];
+  let mouse={x:-9999,y:-9999};
+  function resize(){
+    const dpr=window.devicePixelRatio||1;
+    canvas.width=canvas.offsetWidth*dpr;
+    canvas.height=canvas.offsetHeight*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    build();
+  }
+  function build(){
+    const w=canvas.offsetWidth,h=canvas.offsetHeight,gap=window.innerWidth<700?86:104;
+    points=[];
+    for(let y=-gap;y<h+gap;y+=gap){for(let x=-gap;x<w+gap;x+=gap){points.push({baseX:x,baseY:y,phase:Math.random()*Math.PI*2,x:x,y:y});}}
+  }
+  function draw(){
+    const w=canvas.offsetWidth,h=canvas.offsetHeight,t=performance.now()*.001;
+    ctx.clearRect(0,0,w,h);
+    for(const p of points){
+      p.x=p.baseX+Math.sin(t+p.phase)*22;
+      p.y=p.baseY+Math.cos(t*.82+p.phase)*22;
+      const dx=mouse.x-p.x,dy=mouse.y-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<170){const f=(170-dist)/170;p.x-=dx*f*.08;p.y-=dy*f*.08;}
+    }
+    for(let i=0;i<points.length;i++){
+      for(let j=i+1;j<points.length;j++){
+        const a=points[i],b=points[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<150){const o=(1-dist/150)*.24;ctx.strokeStyle='rgba(96,165,250,'+o+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+      }
+    }
+    for(const p of points){ctx.fillStyle='rgba(125,211,252,.42)';ctx.beginPath();ctx.arc(p.x,p.y,1.25,0,Math.PI*2);ctx.fill();}
+    requestAnimationFrame(draw);
+  }
+  canvas.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
+  window.addEventListener('mouseleave',()=>{mouse.x=-9999;mouse.y=-9999;});
+  window.addEventListener('resize',resize);
+  resize();draw();
+})();
+(function(){
+  const items=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');obs.unobserve(entry.target);}});},{threshold:.12});
+  items.forEach(item=>obs.observe(item));
+})();
+</script>
+</body>
+</html>
