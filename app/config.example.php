@@ -62,6 +62,14 @@ return [
         ],
     ],
     'api_keys' => [
+        'tavus' => [
+            'label' => 'Tavus CVI',
+            'api_key' => de_env('TAVUS_API_KEY'),
+            'endpoint' => de_env('TAVUS_ENDPOINT', 'https://tavusapi.com/v2'),
+            'persona_id' => de_env('TAVUS_PERSONA_ID'),
+            'replica_id' => de_env('TAVUS_REPLICA_ID'),
+            'test_mode' => de_env('TAVUS_TEST_MODE', '1'),
+        ],
         'liveavatar' => [
             'label' => 'LiveAvatar',
             'api_key' => de_env('LIVEAVATAR_API_KEY'),
