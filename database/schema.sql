@@ -1,11 +1,18 @@
 -- David Evans CRM foundation
 -- MySQL 8+ / MariaDB 10.4+
 -- Fresh install file: import this single file into an empty database.
--- Includes username support and the initial admin seed account.
+-- Includes CRM, users, project requests, chat, analytics, knowledge base, AI settings, Tavus video chat, and starter admin.
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS video_conversations;
+DROP TABLE IF EXISTS knowledge_chunks;
+DROP TABLE IF EXISTS knowledge_sources;
+DROP TABLE IF EXISTS agent_settings;
+DROP TABLE IF EXISTS chat_messages;
+DROP TABLE IF EXISTS chat_conversations;
+DROP TABLE IF EXISTS website_visits;
 DROP TABLE IF EXISTS customer_projects;
 DROP TABLE IF EXISTS project_request_notes;
 DROP TABLE IF EXISTS project_requests;
@@ -86,29 +93,121 @@ CREATE TABLE customer_projects (
   CONSTRAINT fk_customer_projects_request FOREIGN KEY (project_request_id) REFERENCES project_requests(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Initial admin account
--- username: dave
--- email: bigriversocial74@gmail.com
--- password: 123456
--- Change this immediately at /admin/account.php after first login.
-INSERT INTO users (
-  email,
-  username,
-  password_hash,
-  full_name,
-  role,
-  status,
-  must_change_password,
-  created_at,
-  updated_at
-) VALUES (
-  'bigriversocial74@gmail.com',
-  'dave',
-  '$2y$12$SgOrPOsThvL1Yyx2VjacY.DsxWB79LXyb.58muwr48DHic/3NAH/S',
-  'Dave',
-  'admin',
-  'active',
-  1,
-  NOW(),
-  NOW()
-);
+CREATE TABLE website_visits (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  visitor_key CHAR(64) NOT NULL,
+  session_key CHAR(64) NOT NULL,
+  page_url VARCHAR(700) NOT NULL,
+  page_title VARCHAR(255) NULL,
+  referrer VARCHAR(700) NULL,
+  user_agent VARCHAR(255) NULL,
+  ip_hash CHAR(64) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_website_visits_created (created_at),
+  INDEX idx_website_visits_visitor_created (visitor_key, created_at),
+  INDEX idx_website_visits_session_created (session_key, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE chat_conversations (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  visitor_key CHAR(64) NOT NULL,
+  name VARCHAR(190) NULL,
+  email VARCHAR(190) NULL,
+  status ENUM('open','pending','closed','archived') NOT NULL DEFAULT 'open',
+  assigned_to_user_id BIGINT UNSIGNED NULL,
+  linked_project_request_id BIGINT UNSIGNED NULL,
+  last_message_at DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_chat_conversations_status_last (status, last_message_at),
+  INDEX idx_chat_conversations_visitor (visitor_key),
+  CONSTRAINT fk_chat_conversations_assigned FOREIGN KEY (assigned_to_user_id) REFERENCES users(id) ON DELETE SET NULL,
+  CONSTRAINT fk_chat_conversations_project FOREIGN KEY (linked_project_request_id) REFERENCES project_requests(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE chat_messages (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  conversation_id BIGINT UNSIGNED NOT NULL,
+  sender_type ENUM('visitor','admin','system') NOT NULL,
+  sender_user_id BIGINT UNSIGNED NULL,
+  message TEXT NOT NULL,
+  metadata JSON NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_chat_messages_conversation_created (conversation_id, created_at),
+  CONSTRAINT fk_chat_messages_conversation FOREIGN KEY (conversation_id) REFERENCES chat_conversations(id) ON DELETE CASCADE,
+  CONSTRAINT fk_chat_messages_user FOREIGN KEY (sender_user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE agent_settings (
+  setting_key VARCHAR(120) NOT NULL PRIMARY KEY,
+  setting_value TEXT NULL,
+  updated_by_user_id BIGINT UNSIGNED NULL,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_agent_settings_user FOREIGN KEY (updated_by_user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE knowledge_sources (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  source_type ENUM('manual','website','upload','transcript') NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  source_url VARCHAR(700) NULL,
+  original_filename VARCHAR(255) NULL,
+  stored_path VARCHAR(700) NULL,
+  mime_type VARCHAR(190) NULL,
+  file_size BIGINT UNSIGNED NULL,
+  status ENUM('draft','processing','ready','needs_review','failed','archived') NOT NULL DEFAULT 'draft',
+  extraction_notes TEXT NULL,
+  created_by_user_id BIGINT UNSIGNED NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_knowledge_sources_status (status),
+  INDEX idx_knowledge_sources_type (source_type),
+  CONSTRAINT fk_knowledge_sources_user FOREIGN KEY (created_by_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE knowledge_chunks (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  source_id BIGINT UNSIGNED NOT NULL,
+  chunk_title VARCHAR(255) NULL,
+  agent_html MEDIUMTEXT NOT NULL,
+  plain_text MEDIUMTEXT NOT NULL,
+  keywords TEXT NULL,
+  sort_order INT UNSIGNED NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FULLTEXT KEY ft_knowledge_plain (plain_text, keywords),
+  INDEX idx_knowledge_chunks_source (source_id, sort_order),
+  INDEX idx_knowledge_chunks_active (is_active),
+  CONSTRAINT fk_knowledge_chunks_source FOREIGN KEY (source_id) REFERENCES knowledge_sources(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE video_conversations (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  visitor_key CHAR(64) NOT NULL,
+  provider ENUM('tavus') NOT NULL DEFAULT 'tavus',
+  provider_conversation_id VARCHAR(190) NULL,
+  conversation_url VARCHAR(900) NULL,
+  persona_id VARCHAR(190) NULL,
+  replica_id VARCHAR(190) NULL,
+  status ENUM('created','active','ended','failed') NOT NULL DEFAULT 'created',
+  test_mode TINYINT(1) NOT NULL DEFAULT 1,
+  started_at DATETIME NULL,
+  ended_at DATETIME NULL,
+  metadata JSON NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_video_conversations_visitor (visitor_key, created_at),
+  INDEX idx_video_conversations_provider_status (provider, status),
+  INDEX idx_video_conversations_provider_id (provider_conversation_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO users (email, username, password_hash, full_name, role, status, must_change_password, created_at, updated_at)
+VALUES ('bigriversocial74@gmail.com','dave','$2y$12$SgOrPOsThvL1Yyx2VjacY.DsxWB79LXyb.58muwr48DHic/3NAH/S','Dave','admin','active',1,NOW(),NOW());
+
+INSERT INTO agent_settings (setting_key, setting_value, updated_at) VALUES
+('chat_automation_enabled','0',NOW()),
+('agent_model_provider','openai',NOW()),
+('agent_system_prompt','You are the website chat agent for David Evans. Answer using only the provided knowledge base context. Be concise, helpful, and honest. If the answer is not in the context, say you do not have that answer yet and offer to route the question to Dave.',NOW()),
+('tavus_video_enabled','1',NOW()),
+('tavus_test_mode','1',NOW());
