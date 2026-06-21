@@ -1,10 +1,3 @@
-ALTER TABLE users
-  ADD COLUMN username VARCHAR(80) NULL AFTER email,
-  ADD UNIQUE KEY uq_users_username (username);
-
-UPDATE users
-SET username = LOWER(SUBSTRING_INDEX(email, '@', 1))
-WHERE username IS NULL;
-
-ALTER TABLE users
-  MODIFY username VARCHAR(80) NOT NULL;
+-- OBSOLETE / DO NOT IMPORT ON A FRESH INSTALL
+-- Username support is now included directly in database/schema.sql.
+-- This file is kept only as historical reference from the v1 development pass.
