@@ -16,7 +16,12 @@ function current_user(): ?array
 
 function current_path(): string
 {
-    return parse_url((string)($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH) ?: '/';
+    $path = parse_url((string)($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH) ?: '/';
+    $base = function_exists('app_base_path') ? app_base_path() : '';
+    if ($base !== '' && ($path === $base || str_starts_with($path, $base . '/'))) {
+        $path = substr($path, strlen($base));
+    }
+    return $path !== '' ? $path : '/';
 }
 
 function must_change_password_allowed_path(): bool
