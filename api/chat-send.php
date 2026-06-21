@@ -15,8 +15,16 @@ try {
     add_chat_message($conversationId, 'visitor', $message, null, ['page_url' => (string)($payload['page_url'] ?? '')]);
 
     if (chat_automation_enabled()) {
-        $reply = knowledge_agent_reply($message);
-        add_chat_message($conversationId, 'system', $reply, null, ['automation' => true, 'knowledge_base' => true]);
+        $matches = knowledge_search($message, 5);
+        $aiReply = ai_generate_knowledge_reply($message, $matches);
+        $reply = $aiReply ?: knowledge_agent_reply($message);
+        add_chat_message($conversationId, 'system', $reply, null, [
+            'automation' => true,
+            'knowledge_base' => true,
+            'model_provider' => ai_active_provider(),
+            'ai_used' => $aiReply !== null,
+            'source_count' => count($matches),
+        ]);
     } else {
         add_chat_message($conversationId, 'system', 'Thanks — your message was received. Dave will respond from the chat dashboard.', null, ['automation' => false]);
     }
