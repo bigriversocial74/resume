@@ -5,7 +5,7 @@ try {
     $payload = json_decode(file_get_contents('php://input') ?: '{}', true) ?: [];
     $conversationId = (int)($payload['conversation_id'] ?? 0);
     if ($conversationId <= 0) {
-        $conversationId = get_or_create_chat_conversation();
+        $conversationId = get_or_create_chat_conversation(null, null, ['page_url' => (string)($payload['page_url'] ?? ''), 'referrer' => (string)($payload['referrer'] ?? '')]);
     }
     $message = trim((string)($payload['message'] ?? ''));
     if ($message === '') {
@@ -18,15 +18,10 @@ try {
         $matches = knowledge_search($message, 5);
         $aiReply = ai_generate_knowledge_reply($message, $matches);
         $reply = $aiReply ?: knowledge_agent_reply($message);
-        add_chat_message($conversationId, 'system', $reply, null, [
-            'automation' => true,
-            'knowledge_base' => true,
-            'model_provider' => ai_active_provider(),
-            'ai_used' => $aiReply !== null,
-            'source_count' => count($matches),
-        ]);
-    } else {
-        add_chat_message($conversationId, 'system', 'Thanks — your message was received. Dave will respond from the chat dashboard.', null, ['automation' => false]);
+        add_chat_message($conversationId, 'system', $reply, null, ['automation' => true, 'knowledge_base' => true, 'model_provider' => ai_active_provider(), 'ai_used' => $aiReply !== null, 'source_count' => count($matches)]);
+    } elseif (should_send_human_fallback($conversationId)) {
+        add_chat_message($conversationId, 'system', 'Thanks — your message was received. Dave will respond from the chat dashboard.', null, ['automation' => false, 'one_time_fallback' => true]);
+        mark_human_fallback_sent($conversationId);
     }
 
     echo json_encode(['ok' => true, 'conversation_id' => $conversationId, 'messages' => read_chat_messages($conversationId)]);
