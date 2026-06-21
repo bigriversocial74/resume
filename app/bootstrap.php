@@ -20,7 +20,7 @@ if (!empty($config['app']['debug'])) {
 header('X-Frame-Options: SAMEORIGIN');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+header('Permissions-Policy: camera=(self), microphone=(self), fullscreen=(self), display-capture=(self), geolocation=()');
 
 $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? null) === '443');
 session_name($config['security']['session_name'] ?? 'de_crm_session');
@@ -43,6 +43,7 @@ require_once __DIR__ . '/projects.php';
 require_once __DIR__ . '/chat.php';
 require_once __DIR__ . '/knowledge.php';
 require_once __DIR__ . '/ai.php';
+require_once __DIR__ . '/tavus.php';
 
 function app_config(?string $key = null): mixed
 {
