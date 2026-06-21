@@ -6,7 +6,7 @@ function current_user(): ?array
     if (empty($_SESSION['user_id'])) {
         return null;
     }
-    $user = db_one('SELECT id, email, full_name, role, status, must_change_password FROM users WHERE id = ? LIMIT 1', [$_SESSION['user_id']]);
+    $user = db_one('SELECT id, email, username, full_name, role, status, must_change_password FROM users WHERE id = ? LIMIT 1', [$_SESSION['user_id']]);
     if (!$user || $user['status'] !== 'active') {
         logout_user();
         return null;
@@ -58,8 +58,8 @@ function logout_user(): void
 
 function authenticate(string $email, string $password): bool
 {
-    $email = normalize_email($email);
-    $user = db_one('SELECT * FROM users WHERE email = ? LIMIT 1', [$email]);
+    $login = normalize_email($email);
+    $user = db_one('SELECT * FROM users WHERE email = ? OR username = ? LIMIT 1', [$login, $login]);
     if (!$user || $user['status'] !== 'active') {
         usleep(250000);
         return false;
@@ -95,13 +95,21 @@ function create_user_by_admin(int $adminId, string $fullName, string $email, str
     if (!valid_email($email)) {
         throw new InvalidArgumentException('Invalid email.');
     }
+    $baseUsername = preg_replace('/[^a-z0-9_]/', '', str_replace(['.', '-'], '_', strstr($email, '@', true))) ?: 'customer';
+    $username = $baseUsername;
+    $suffix = 1;
+    while (db_one('SELECT id FROM users WHERE username = ? LIMIT 1', [$username])) {
+        $username = $baseUsername . $suffix;
+        $suffix++;
+    }
     $password = random_temp_password();
     $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = db()->prepare('INSERT INTO users (email, password_hash, full_name, role, status, must_change_password, created_by_user_id, created_at, updated_at) VALUES (?, ?, ?, ?, "active", 1, ?, NOW(), NOW())');
-    $stmt->execute([$email, $hash, trim($fullName), $role, $adminId]);
+    $stmt = db()->prepare('INSERT INTO users (email, username, password_hash, full_name, role, status, must_change_password, created_by_user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, "active", 1, ?, NOW(), NOW())');
+    $stmt->execute([$email, $username, $hash, trim($fullName), $role, $adminId]);
     return [
         'id' => (int)db()->lastInsertId(),
         'email' => $email,
+        'username' => $username,
         'temporary_password' => $password,
         'role' => $role,
     ];
