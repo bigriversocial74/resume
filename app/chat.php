@@ -6,7 +6,7 @@ function visitor_key_from_request(): string
     $raw = (string)($_COOKIE['de_visitor'] ?? '');
     if (!preg_match('/^[a-f0-9]{64}$/', $raw)) {
         $raw = bin2hex(random_bytes(32));
-        setcookie('de_visitor', ['value' => $raw, 'expires' => time() + 31536000, 'path' => '/', 'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), 'httponly' => false, 'samesite' => 'Lax']);
+        setcookie('de_visitor', $raw, ['expires' => time() + 31536000, 'path' => '/', 'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), 'httponly' => false, 'samesite' => 'Lax']);
     }
     return $raw;
 }
@@ -16,7 +16,7 @@ function session_key_from_request(): string
     $raw = (string)($_COOKIE['de_visit_session'] ?? '');
     if (!preg_match('/^[a-f0-9]{64}$/', $raw)) {
         $raw = bin2hex(random_bytes(32));
-        setcookie('de_visit_session', ['value' => $raw, 'expires' => time() + 1800, 'path' => '/', 'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), 'httponly' => false, 'samesite' => 'Lax']);
+        setcookie('de_visit_session', $raw, ['expires' => time() + 1800, 'path' => '/', 'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), 'httponly' => false, 'samesite' => 'Lax']);
     }
     return $raw;
 }
@@ -32,10 +32,7 @@ function track_visit(array $data): void
 function track_visit_heartbeat(array $data): void
 {
     $seconds = max(0, min(86400, (int)($data['time_on_page_seconds'] ?? 0)));
-    db_exec(
-        'UPDATE website_visits SET last_ping_at = NOW(), time_on_page_seconds = GREATEST(time_on_page_seconds, ?), ended_at = IF(? > 0, NOW(), ended_at) WHERE visitor_key = ? AND session_key = ? AND page_url = ? ORDER BY id DESC LIMIT 1',
-        [$seconds, !empty($data['ended']) ? 1 : 0, visitor_key_from_request(), session_key_from_request(), substr((string)($data['page_url'] ?? ''), 0, 700)]
-    );
+    db_exec('UPDATE website_visits SET last_ping_at = NOW(), time_on_page_seconds = GREATEST(time_on_page_seconds, ?), ended_at = IF(? > 0, NOW(), ended_at) WHERE visitor_key = ? AND session_key = ? AND page_url = ? ORDER BY id DESC LIMIT 1', [$seconds, !empty($data['ended']) ? 1 : 0, visitor_key_from_request(), session_key_from_request(), substr((string)($data['page_url'] ?? ''), 0, 700)]);
     db_exec('UPDATE chat_conversations SET total_time_on_site_seconds = GREATEST(total_time_on_site_seconds, ?), last_seen_at = NOW(), last_page_url = ? WHERE visitor_key = ? AND status IN ("open", "pending")', [$seconds, substr((string)($data['page_url'] ?? ''), 0, 700), visitor_key_from_request()]);
 }
 
