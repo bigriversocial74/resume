@@ -85,7 +85,7 @@ function admin_shell_head(string $title): void
 {
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' . e($title) . '</title><style>';
     echo admin_shell_css();
-    echo '</style></head><body>';
+    echo '</style><link rel="stylesheet" href="/assets/admin-shell-rail.css?v=1"></head><body>';
 }
 
 function admin_shell_open(string $title, string $kicker, string $heading, string $intro = ''): void
