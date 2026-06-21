@@ -1,12 +1,13 @@
 -- David Evans CRM foundation
 -- MySQL 8+ / MariaDB 10.4+
 -- Fresh install file: import this single file into an empty database.
--- Includes CRM, users, project requests, chat, analytics, knowledge base, AI settings, Tavus video chat, and starter admin.
+-- Includes CRM, users, project requests, chat, analytics, knowledge base, AI settings, Tavus video chat, media profiles, and starter admin.
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS video_conversations;
+DROP TABLE IF EXISTS media_profiles;
 DROP TABLE IF EXISTS knowledge_chunks;
 DROP TABLE IF EXISTS knowledge_sources;
 DROP TABLE IF EXISTS agent_settings;
@@ -182,6 +183,32 @@ CREATE TABLE knowledge_chunks (
   CONSTRAINT fk_knowledge_chunks_source FOREIGN KEY (source_id) REFERENCES knowledge_sources(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE media_profiles (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  source_type ENUM('hero','upload','external') NOT NULL,
+  display_name VARCHAR(190) NOT NULL,
+  provider VARCHAR(80) NOT NULL DEFAULT 'tavus',
+  provider_item_id VARCHAR(190) NULL,
+  status VARCHAR(80) NULL,
+  file_path VARCHAR(700) NULL,
+  file_url VARCHAR(900) NULL,
+  file_token CHAR(64) NULL,
+  mime_type VARCHAR(190) NULL,
+  file_size BIGINT UNSIGNED NULL,
+  option_one VARCHAR(190) NULL,
+  option_two VARCHAR(190) NULL,
+  option_three VARCHAR(190) NULL,
+  provider_response JSON NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 0,
+  created_by_user_id BIGINT UNSIGNED NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_media_profiles_token (file_token),
+  INDEX idx_media_profiles_provider_item (provider_item_id),
+  INDEX idx_media_profiles_active (is_active),
+  CONSTRAINT fk_media_profiles_user FOREIGN KEY (created_by_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE video_conversations (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   visitor_key CHAR(64) NOT NULL,
@@ -210,4 +237,5 @@ INSERT INTO agent_settings (setting_key, setting_value, updated_at) VALUES
 ('agent_model_provider','openai',NOW()),
 ('agent_system_prompt','You are the website chat agent for David Evans. Answer using only the provided knowledge base context. Be concise, helpful, and honest. If the answer is not in the context, say you do not have that answer yet and offer to route the question to Dave.',NOW()),
 ('tavus_video_enabled','1',NOW()),
-('tavus_test_mode','1',NOW());
+('tavus_test_mode','1',NOW()),
+('tavus_active_replica_id','',NOW());
