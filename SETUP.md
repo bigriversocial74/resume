@@ -8,13 +8,17 @@ Copy `app/config.example.php` to `app/config.php` and add the real database cred
 
 ## 2. Create database tables and starter admin
 
-For a new empty database, import **one file only**:
+For a new empty database, import the core schema first:
 
 ```bash
 mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/schema.sql
 ```
 
-The current `database/schema.sql` includes the full CRM schema, username support, and the starter admin account.
+Then import the v1 chat and analytics tables:
+
+```bash
+mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/migrations/002_chat_analytics.sql
+```
 
 Starter admin:
 
@@ -34,6 +38,14 @@ After logging in, open `/admin/account.php` and update the username, email, full
 - Forms use CSRF tokens.
 - Login attempts lock after repeated failures.
 
-## 4. Next security step before production
+## 4. Chat and analytics notes
+
+- The public website loads `assets/chat-widget.js`.
+- Website visits are sent to `/api/track-visit.php`.
+- Chat messages are stored in `chat_conversations` and `chat_messages`.
+- Admin chat dashboard: `/admin/chat.php`.
+- Analytics dashboard: `/admin/analytics.php`.
+
+## 5. Next security step before production
 
 Before public production use, replace the starter password immediately and wire a secure credential-delivery step or one-time account setup link for customer accounts.
