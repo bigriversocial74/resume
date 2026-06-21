@@ -1,0 +1,23 @@
+<?php
+require_once __DIR__ . '/../app/bootstrap.php';
+$admin = require_role('admin');
+$message = null;
+$error = null;
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        verify_csrf();
+        set_agent_setting('tavus_video_enabled', !empty($_POST['tavus_video_enabled']) ? '1' : '0', (int)$admin['id']);
+        set_agent_setting('tavus_test_mode', !empty($_POST['tavus_test_mode']) ? '1' : '0', (int)$admin['id']);
+        set_agent_setting('tavus_active_replica_id', trim((string)($_POST['active_replica_id'] ?? '')), (int)$admin['id']);
+        $message = 'Tavus settings updated.';
+    }
+} catch (Throwable $e) {
+    $error = $e->getMessage();
+}
+$activeReplica = tavus_active_replica_id();
+$tavusReady = !empty(tavus_config()['api_key']);
+$videoEnabled = agent_setting('tavus_video_enabled', '1') === '1';
+$testMode = tavus_test_mode();
+$heroUrl = tavus_public_base_url() . '/images/dave_main.png';
+?>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tavus Settings</title><style>body{margin:0;background:#f8faff;font-family:Inter,Arial,sans-serif;color:#111827}.top{background:#07101e;color:#fff;padding:22px 0}.wrap{width:min(960px,calc(100% - 40px));margin:auto}.top .wrap{display:flex;justify-content:space-between;gap:18px}.nav{display:flex;gap:18px;flex-wrap:wrap}a{color:inherit;text-decoration:none}.hero{padding:42px 0}.kicker{color:#2f68ff;font-size:11px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}h1{font-size:42px;letter-spacing:-.055em;margin:10px 0}.muted{color:#667085;line-height:1.65}.panel{background:#fff;border:1px solid #edf0f6;border-radius:16px;padding:22px;box-shadow:0 18px 48px rgba(18,30,57,.055);margin-bottom:18px}.field{display:grid;gap:7px;margin-bottom:14px}.field label{font-size:12px;font-weight:800;color:#667085}.input{width:100%;border:1px solid #dfe5ef;border-radius:10px;padding:13px;font:inherit}.btn{border:0;border-radius:999px;background:#2f68ff;color:#fff;padding:12px 18px;font-size:12px;font-weight:900;cursor:pointer}.ok{background:#ecfdf5;color:#065f46;padding:14px;border-radius:12px;margin-bottom:18px}.err{background:#fef2f2;color:#991b1b;padding:14px;border-radius:12px;margin-bottom:18px}.pill{display:inline-flex;border-radius:999px;background:#eef4ff;color:#2f68ff;font-size:11px;font-weight:900;padding:6px 9px;text-transform:uppercase;letter-spacing:.06em}.pill.off{background:#f3f4f6;color:#6b7280}.toggle{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.toggle input{width:22px;height:22px}.preview{border-radius:16px;overflow:hidden;background:#07101e;min-height:320px;background-image:url('/images/dave_main.png');background-size:cover;background-position:center top}code{background:#f3f4f6;padding:3px 6px;border-radius:6px;word-break:break-all}</style></head><body><header class="top"><div class="wrap"><strong>David Evans CRM</strong><nav class="nav"><a href="/admin/dashboard.php">Requests</a><a href="/admin/chat.php">Chats</a><a href="/admin/analytics.php">Analytics</a><a href="/admin/knowledge.php">Knowledge</a><a href="/admin/tavus.php">Tavus</a><a href="/admin/logout.php">Logout</a></nav></div></header><main class="wrap"><section class="hero"><div class="kicker">Tavus Settings</div><h1>Hero video chat</h1><p class="muted">Paste the Tavus replica id here after creating it in Tavus. The current hero image public URL is shown below for reference.</p></section><?php if ($message): ?><div class="ok"><?= e($message) ?></div><?php endif; ?><?php if ($error): ?><div class="err"><?= e($error) ?></div><?php endif; ?><section class="panel"><p><span class="pill <?= $tavusReady ? '' : 'off' ?>"><?= $tavusReady ? 'API key configured' : 'Missing API key' ?></span> <span class="pill <?= $activeReplica ? '' : 'off' ?>"><?= $activeReplica ? 'Replica selected' : 'No replica selected' ?></span></p><form method="post"><?= csrf_field() ?><div class="toggle"><input type="checkbox" name="tavus_video_enabled" value="1" <?= $videoEnabled ? 'checked' : '' ?>><strong>Enable hero video chat</strong><input type="checkbox" name="tavus_test_mode" value="1" <?= $testMode ? 'checked' : '' ?>><strong>Test mode</strong></div><div class="field"><label>Active Tavus replica id</label><input class="input" name="active_replica_id" value="<?= e($activeReplica) ?>" placeholder="Paste Tavus replica_id"></div><button class="btn" type="submit">Save Tavus Settings</button></form></section><section class="panel"><h2>Current hero image</h2><div class="preview"></div><p class="muted">Public URL:<br><code><?= e($heroUrl) ?></code></p></section></main></body></html>
