@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 760">
+  <rect width="1100" height="760" rx="42" fill="#050712" />
+  <rect x="34" y="34" width="1032" height="692" rx="34" fill="#0b1020" stroke="#1e293b" />
+  <rect x="70" y="76" width="224" height="608" rx="24" fill="#0f172a" />
+  <text x="102" y="128" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="24" font-weight="800">CRM CONTROL</text>
+  <text x="102" y="156" fill="#64748b" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2">ADMIN DASHBOARD</text>
+  <rect x="102" y="208" width="150" height="12" rx="6" fill="#2563eb" />
+  <rect x="102" y="252" width="118" height="12" rx="6" fill="#334155" />
+  <rect x="102" y="296" width="134" height="12" rx="6" fill="#334155" />
+  <rect x="102" y="340" width="104" height="12" rx="6" fill="#334155" />
+  <rect x="102" y="384" width="142" height="12" rx="6" fill="#334155" />
+  <rect x="330" y="76" width="698" height="124" rx="24" fill="#111827" />
+  <text x="365" y="128" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28" font-weight="800">Questionnaire + Client Pipeline</text>
+  <text x="365" y="162" fill="#94a3b8" font-family="Arial, sans-serif" font-size="14">Track inquiries, needs, budget, source, status, tasks, and next steps.</text>
+  <rect x="330" y="230" width="214" height="144" rx="24" fill="#111827" />
+  <rect x="572" y="230" width="214" height="144" rx="24" fill="#111827" />
+  <rect x="814" y="230" width="214" height="144" rx="24" fill="#111827" />
+  <text x="365" y="286" fill="#7dd3fc" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">NEW LEADS</text>
+  <text x="365" y="332" fill="#f8fafc" font-family="Arial, sans-serif" font-size="42" font-weight="800">18</text>
+  <text x="607" y="286" fill="#a78bfa" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">ACTIVE BUILDS</text>
+  <text x="607" y="332" fill="#f8fafc" font-family="Arial, sans-serif" font-size="42" font-weight="800">07</text>
+  <text x="849" y="286" fill="#86efac" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">FOLLOW UPS</text>
+  <text x="849" y="332" fill="#f8fafc" font-family="Arial, sans-serif" font-size="42" font-weight="800">12</text>
+  <rect x="330" y="410" width="698" height="274" rx="24" fill="#111827" />
+  <text x="365" y="462" fill="#f8fafc" font-family="Arial, sans-serif" font-size="20" font-weight="800">Pipeline</text>
+  <g fill="#1e293b">
+    <rect x="365" y="500" width="628" height="34" rx="17" />
+    <rect x="365" y="552" width="628" height="34" rx="17" />
+    <rect x="365" y="604" width="628" height="34" rx="17" />
+  </g>
+  <g fill="#94a3b8" font-family="Arial, sans-serif" font-size="13" font-weight="700">
+    <text x="390" y="522">Local business website rebuild</text>
+    <text x="390" y="574">Artist community platform</text>
+    <text x="390" y="626">AI intake automation</text>
+  </g>
+  <rect x="785" y="506" width="92" height="22" rx="11" fill="#2563eb" />
+  <rect x="785" y="558" width="92" height="22" rx="11" fill="#a78bfa" />
+  <rect x="785" y="610" width="92" height="22" rx="11" fill="#16a34a" />
+</svg>
