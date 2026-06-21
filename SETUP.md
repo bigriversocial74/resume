@@ -14,6 +14,8 @@ For a new empty database, import one file from the repository root:
 mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/import_all.sql
 ```
 
+`database/import_all.sql` now sources the main `database/schema.sql`, which includes CRM, users, project requests, chat, analytics, knowledge base, AI settings, Tavus video conversations, and the starter admin.
+
 After logging in, open `/admin/account.php` and update the username, email, full name, and password.
 
 ## 3. Authentication notes
@@ -29,17 +31,18 @@ After logging in, open `/admin/account.php` and update the username, email, full
 ## 4. Chat, analytics, and agent notes
 
 - Public website chat widget: `assets/chat-widget.js`.
+- Hero video chat launcher: `assets/hero-video-chat.js`.
 - Visit tracking endpoint: `/api/track-visit.php`.
-- Admin chat dashboard: `/admin/chat.php`.
+- Text chat dashboard: `/admin/chat.php`.
 - Analytics dashboard: `/admin/analytics.php`.
 - Agent knowledge base: `/admin/knowledge.php`.
 - Chat automation can be toggled on or off from the knowledge base page.
-- The selected model provider retrieves knowledge chunks and drafts the chat answer.
+- The selected model provider retrieves knowledge chunks and drafts the text chat answer.
 - DOCX text extraction requires PHP ZipArchive.
 - PDF text extraction requires `pdftotext` on the server.
 - Audio and video uploads are stored for a later transcription worker.
 
-## 5. AI provider environment variables
+## 5. AI and video provider environment variables
 
 Set the keys and models in server environment variables or in `app/config.php`:
 
@@ -47,7 +50,10 @@ Set the keys and models in server environment variables or in `app/config.php`:
 - Claude: `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`
 - Gemini: `GEMINI_API_KEY`, `GEMINI_MODEL`
 - Kimi: `KIMI_API_KEY`, `KIMI_MODEL`
+- Tavus: `TAVUS_API_KEY`, `TAVUS_PERSONA_ID`, `TAVUS_REPLICA_ID`, `TAVUS_TEST_MODE`
 - LiveAvatar: `LIVEAVATAR_API_KEY`, `LIVEAVATAR_ENDPOINT`, `LIVEAVATAR_PROJECT_ID`
+
+Tavus conversations are created only after a visitor clicks **Chat With Dave** in the hero section. The frontend embeds the returned conversation URL in an iframe with camera and microphone permissions. The server-side API key is never exposed to browser code.
 
 ## 6. Next security step before production
 
