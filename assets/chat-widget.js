@@ -9,6 +9,21 @@
   style.textContent = css;
   document.head.appendChild(style);
 
+  function wireHeroVideoButton() {
+    const heroButton = Array.from(document.querySelectorAll('.hero .btn-circle')).find((button) => button.textContent.toLowerCase().includes('watch intro'));
+    if (!heroButton) return;
+    heroButton.href = '#video-chat';
+    heroButton.setAttribute('data-hero-video-chat', 'true');
+    const label = heroButton.querySelector('strong');
+    if (label) label.textContent = 'Chat With Dave';
+    const icon = heroButton.querySelector('span:first-child');
+    if (icon) icon.textContent = '▶';
+    const script = document.createElement('script');
+    script.src = 'assets/hero-video-chat.js';
+    script.defer = true;
+    document.body.appendChild(script);
+  }
+
   fetch('/api/track-visit.php', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -30,6 +45,7 @@
   `;
   document.body.appendChild(panel);
   document.body.appendChild(bubble);
+  wireHeroVideoButton();
 
   const messagesEl = panel.querySelector('#de-chat-messages');
   const form = panel.querySelector('#de-chat-form');
