@@ -14,11 +14,25 @@ function current_user(): ?array
     return $user;
 }
 
+function current_path(): string
+{
+    return parse_url((string)($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH) ?: '/';
+}
+
+function must_change_password_allowed_path(): bool
+{
+    $path = current_path();
+    return in_array($path, ['/admin/account.php', '/admin/logout.php'], true);
+}
+
 function require_login(): array
 {
     $user = current_user();
     if (!$user) {
         redirect_to('/admin/login.php');
+    }
+    if ((int)$user['must_change_password'] === 1 && !must_change_password_allowed_path()) {
+        redirect_to('/admin/account.php?first_login=1');
     }
     return $user;
 }
