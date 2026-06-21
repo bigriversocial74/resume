@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827" />
+      <stop offset="0.55" stop-color="#0f172a" />
+      <stop offset="1" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#164e63" />
+      <stop offset="1" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="jeans" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563eb" />
+      <stop offset="1" stop-color="#1e293b" />
+    </linearGradient>
+    <radialGradient id="skin" cx="50%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#f1c19c" />
+      <stop offset="1" stop-color="#b77953" />
+    </radialGradient>
+  </defs>
+  <rect width="900" height="900" rx="56" fill="url(#bg)" />
+  <circle cx="718" cy="170" r="180" fill="#1d4ed8" opacity="0.16" />
+  <circle cx="188" cy="710" r="230" fill="#7dd3fc" opacity="0.08" />
+  <path d="M0 690c145-64 291-87 438-69 155 18 309 81 462 21v258H0V690Z" fill="#0b1120" opacity="0.95" />
+  <rect x="80" y="105" width="240" height="340" rx="28" fill="#ffffff" opacity="0.04" />
+  <rect x="595" y="100" width="186" height="330" rx="28" fill="#ffffff" opacity="0.05" />
+  <rect x="626" y="130" width="98" height="16" rx="8" fill="#e2e8f0" opacity="0.18" />
+  <rect x="626" y="168" width="128" height="16" rx="8" fill="#e2e8f0" opacity="0.12" />
+  <rect x="626" y="206" width="82" height="16" rx="8" fill="#e2e8f0" opacity="0.12" />
+  <ellipse cx="496" cy="778" rx="258" ry="54" fill="#000000" opacity="0.36" />
+  <path d="M376 610c-72 22-126 79-151 170h168c14-48 36-88 67-120l-84-50Z" fill="url(#jeans)" />
+  <path d="M507 635c92 39 157 87 195 145H518c-36-54-75-90-119-108l108-37Z" fill="url(#jeans)" />
+  <path d="M316 370c28-93 92-144 191-139 91 5 150 55 176 151 18 70 15 157-8 267H300c-18-105-13-198 16-279Z" fill="url(#shirt)" />
+  <path d="M382 315l94 205 108-205c-27-25-61-38-101-39-42-1-75 12-101 39Z" fill="#eff6ff" opacity="0.92" />
+  <path d="M445 332l38 76 41-76" fill="none" stroke="#0f172a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" opacity="0.78" />
+  <path d="M312 409c-47 74-62 137-44 188 12 35 47 51 91 37 44-15 65-47 51-83-8-20-22-35-41-45 7-34 19-69 37-105l-94 8Z" fill="url(#shirt)" />
+  <path d="M680 403c50 79 65 145 45 198-13 34-49 48-91 31-40-17-58-48-44-82 8-19 23-34 43-44-8-37-22-73-41-108l88 5Z" fill="url(#shirt)" />
+  <path d="M358 569c25 15 51 20 78 14 22-5 40-1 54 14 14-15 33-20 57-14 27 6 52 2 76-13 15 35 5 67-29 96-29 25-63 38-102 38-40 0-75-13-105-38-34-29-44-61-29-97Z" fill="#d9a27a" />
+  <path d="M383 579c33 13 67 18 102 16 37-1 76-7 118-18" fill="none" stroke="#8b5e3c" stroke-width="8" opacity="0.35" stroke-linecap="round" />
+  <circle cx="604" cy="604" r="34" fill="#020617" />
+  <circle cx="604" cy="604" r="25" fill="none" stroke="#94a3b8" stroke-width="5" />
+  <path d="M604 584v20l14 11" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" />
+  <path d="M420 139c28-44 86-61 144-39 53 20 83 67 78 128-4 57-33 99-78 121-45 22-94 18-133-8-45-30-61-78-48-137 5-23 17-45 37-65Z" fill="#b77a55" />
+  <path d="M398 169c17-64 67-103 132-104 65-1 111 35 133 96 13 36 11 72-6 107-19-35-38-64-57-88-45 26-93 28-143 7-18 23-38 52-59 88-14-36-14-71 0-106Z" fill="#c79a6d" />
+  <path d="M423 204c12-25 31-43 57-54 48 18 90 16 127-5 16 17 27 38 31 63 12 78-31 140-105 150-78 11-126-48-110-154Z" fill="url(#skin)" />
+  <path d="M397 252c-25-49-21-94 12-136 34-43 82-60 145-52 54 7 93 32 118 76 23 40 25 84 5 132-12-77-51-126-116-146-34 21-70 29-110 24-29 25-47 59-54 102Z" fill="#c7a176" />
+  <path d="M395 250c-16-5-28 4-30 26-2 23 10 41 33 55l17-12-20-69Z" fill="#c28a62" />
+  <path d="M648 250c16-4 27 6 28 28 1 22-11 40-33 53l-16-12 21-69Z" fill="#c28a62" />
+  <path d="M466 260c12-8 25-8 38 0" stroke="#3f2f26" stroke-width="8" stroke-linecap="round" opacity="0.85" />
+  <path d="M548 260c12-8 25-8 38 0" stroke="#3f2f26" stroke-width="8" stroke-linecap="round" opacity="0.85" />
+  <circle cx="484" cy="282" r="7" fill="#111827" />
+  <circle cx="565" cy="282" r="7" fill="#111827" />
+  <path d="M523 282c-6 22-9 39-9 51 11 4 22 4 33 0" stroke="#8b5e3c" stroke-width="6" fill="none" stroke-linecap="round" />
+  <path d="M474 370c34 26 73 27 116 1" stroke="#7c4a35" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.7" />
+  <path d="M451 346c54 19 108 19 162 0" stroke="#f1f5f9" stroke-width="18" stroke-linecap="round" opacity="0.23" />
+  <path d="M435 336c62 37 127 38 195 2" stroke="#d1d5db" stroke-width="9" stroke-linecap="round" opacity="0.42" />
+  <path d="M415 209c50-23 95-45 137-67 45 13 79 42 102 88-1-75-42-123-124-142-74-17-126 23-115 121Z" fill="#a9845d" opacity="0.95" />
+  <path d="M410 217c-16 48-20 91-12 130-41-84-38-155 9-211 37-45 87-65 151-60-51 29-100 76-148 141Z" fill="#d1aa7a" opacity="0.9" />
+  <path d="M306 364c68 42 129 53 183 34 63 21 128 10 195-35" fill="none" stroke="#2563eb" stroke-width="3" opacity="0.28" />
+  <text x="62" y="806" fill="#f8fafc" font-family="Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="2">DAVID EVANS</text>
+  <text x="62" y="838" fill="#94a3b8" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="3">AI INTEGRATED SOLUTIONS</text>
+</svg>
