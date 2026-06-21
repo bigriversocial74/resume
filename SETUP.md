@@ -6,23 +6,25 @@ Copy `app/config.example.php` to `app/config.php` and add the real database cred
 
 `app/config.php` is ignored by git and should never be committed.
 
-## 2. Create database tables
+## 2. Create database tables and starter admin
 
-Import:
-
-```sql
-source database/schema.sql;
-```
-
-## 3. Create the first admin
-
-Use the CLI script:
+For a new empty database, import **one file only**:
 
 ```bash
-ADMIN_EMAIL="you@example.com" ADMIN_NAME="David Evans" ADMIN_PASS="Use-A-Strong-Password-123!" php scripts/create_admin.php
+mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/schema.sql
 ```
 
-## 4. Authentication notes
+The current `database/schema.sql` includes the full CRM schema, username support, and the starter admin account.
+
+Starter admin:
+
+- Username: `dave`
+- Email: `bigriversocial74@gmail.com`
+- Initial password: `123456`
+
+After logging in, open `/admin/account.php` and update the username, email, full name, and password.
+
+## 3. Authentication notes
 
 - Public customer self-registration is intentionally not included.
 - Admins create customer accounts.
@@ -32,6 +34,6 @@ ADMIN_EMAIL="you@example.com" ADMIN_NAME="David Evans" ADMIN_PASS="Use-A-Strong-
 - Forms use CSRF tokens.
 - Login attempts lock after repeated failures.
 
-## 5. Next security step before production
+## 4. Next security step before production
 
-The customer account creation page is intentionally conservative. Before public production use, wire a secure credential-delivery step or a one-time account setup link so credentials are never emailed or exposed casually.
+Before public production use, replace the starter password immediately and wire a secure credential-delivery step or one-time account setup link for customer accounts.
