@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../app/admin_shell.php';
 $user = require_login();
 $message = null;
 $error = null;
@@ -52,6 +53,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $e->getMessage();
     }
 }
-$back = $user['role'] === 'admin' ? '/admin/dashboard.php' : '/customer/dashboard.php';
+admin_shell_open('Account Settings', 'Account Settings', 'Update your admin profile', $forceChange ? 'First login requires a credential update before continuing.' : 'Update your username, email, full name, or credentials.');
 ?>
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Account Settings</title><style>body{margin:0;background:#f8faff;font-family:Arial,sans-serif;color:#111827}.wrap{width:min(680px,calc(100% - 40px));margin:40px auto}.card{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:28px;box-shadow:0 18px 48px rgba(18,30,57,.08)}label{display:block;margin-top:14px;font-size:12px;font-weight:800;color:#667085}input{width:100%;padding:13px;border:1px solid #dfe5ef;border-radius:10px;font:inherit}.btn{margin-top:18px;border:0;border-radius:999px;background:#2f68ff;color:#fff;padding:13px 20px;font-weight:900;cursor:pointer}.ok{background:#ecfdf5;color:#065f46;padding:12px;border-radius:10px;margin-bottom:14px}.err{background:#fef2f2;color:#991b1b;padding:12px;border-radius:10px;margin-bottom:14px}.notice{background:#eff6ff;color:#1d4ed8;padding:14px;border-radius:12px;margin:16px 0;font-weight:700}a{color:#2f68ff}.muted{color:#667085;line-height:1.6}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:640px){.row{grid-template-columns:1fr}}</style></head><body><main class="wrap"><p><?php if (!$forceChange): ?><a href="<?= e($back) ?>">Back</a><?php endif; ?></p><section class="card"><h1>Account Settings</h1><?php if ($forceChange): ?><div class="notice">Update your password before continuing.</div><?php endif; ?><?php if ($message): ?><div class="ok"><?= e($message) ?></div><?php endif; ?><?php if ($error): ?><div class="err"><?= e($error) ?></div><?php endif; ?><form method="post"><?= csrf_field() ?><div class="row"><div><label>Username</label><input name="username" value="<?= e($user['username'] ?? '') ?>" required></div><div><label>Email</label><input type="email" name="email" value="<?= e($user['email']) ?>" required></div></div><label>Full name</label><input name="full_name" value="<?= e($user['full_name']) ?>" required><hr><p class="muted"><?= $forceChange ? 'Password update is required.' : 'Leave password fields blank to keep the current password.' ?></p><label>Current password</label><input type="password" name="current_password" autocomplete="current-password"><div class="row"><div><label>New password</label><input type="password" name="new_password" autocomplete="new-password"></div><div><label>Confirm new password</label><input type="password" name="confirm_password" autocomplete="new-password"></div></div><button class="btn" type="submit">Save Account</button><?php if (!$forceChange): ?> <a href="<?= e($back) ?>">Cancel</a><?php endif; ?></form></section></main></body></html>
+<style>.account-card{max-width:820px}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:7px;margin-top:14px}.field label{font-size:12px;font-weight:800;color:#667085}.field input{width:100%;padding:13px;border:1px solid #dfe5ef;border-radius:10px;font:inherit}.btn{margin-top:18px;border:0;border-radius:999px;background:#2f68ff;color:#fff;padding:13px 20px;font-weight:900;cursor:pointer}.ok{background:#ecfdf5;color:#065f46;padding:12px;border-radius:10px;margin-bottom:14px}.err{background:#fef2f2;color:#991b1b;padding:12px;border-radius:10px;margin-bottom:14px}.notice{background:#eff6ff;color:#1d4ed8;padding:14px;border-radius:12px;margin:16px 0;font-weight:700}.divider{border:0;border-top:1px solid #edf0f6;margin:22px 0}.muted{color:#667085;line-height:1.6}@media(max-width:640px){.row{grid-template-columns:1fr}}</style>
+<section class="card account-card">
+    <?php if ($forceChange): ?><div class="notice">Update your password before continuing.</div><?php endif; ?>
+    <?php if ($message): ?><div class="ok"><?= e($message) ?></div><?php endif; ?>
+    <?php if ($error): ?><div class="err"><?= e($error) ?></div><?php endif; ?>
+    <form method="post">
+        <?= csrf_field() ?>
+        <div class="row"><div class="field"><label>Username</label><input name="username" value="<?= e($user['username'] ?? '') ?>" required></div><div class="field"><label>Email</label><input type="email" name="email" value="<?= e($user['email']) ?>" required></div></div>
+        <div class="field"><label>Full name</label><input name="full_name" value="<?= e($user['full_name']) ?>" required></div>
+        <hr class="divider">
+        <p class="muted"><?= $forceChange ? 'Password update is required.' : 'Leave password fields blank to keep the current password.' ?></p>
+        <div class="field"><label>Current password</label><input type="password" name="current_password" autocomplete="current-password"></div>
+        <div class="row"><div class="field"><label>New password</label><input type="password" name="new_password" autocomplete="new-password"></div><div class="field"><label>Confirm new password</label><input type="password" name="confirm_password" autocomplete="new-password"></div></div>
+        <button class="btn" type="submit">Save Account</button>
+    </form>
+</section>
+<?php admin_shell_close();
