@@ -5,4 +5,6 @@ app/config.php
 /node_modules/
 /storage/knowledge/*
 !/storage/knowledge/.gitkeep
+/storage/media-profiles/*
+!/storage/media-profiles/.gitkeep
 .DS_Store
