@@ -1,12 +1,18 @@
 # Database import
 
-For a new install, import **one file only**:
+For a new install, import the core schema first:
 
 ```bash
 mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/schema.sql
 ```
 
-Do **not** import the migration file or bootstrap file after `schema.sql` on a fresh database. Those were split helpers during development; the current `schema.sql` is the consolidated source of truth for a fresh install.
+Then import the v1 chat and analytics tables:
+
+```bash
+mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/migrations/002_chat_analytics.sql
+```
+
+Do **not** import the obsolete migration or bootstrap files. They are retained only as historical references.
 
 The seeded admin account is:
 
