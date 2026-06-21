@@ -6,31 +6,13 @@ Copy `app/config.example.php` to `app/config.php` and add the real database cred
 
 `app/config.php` is ignored by git and should never be committed.
 
-## 2. Create database tables and starter admin
+## 2. Import the database
 
-For a new empty database, import the core schema first:
-
-```bash
-mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/schema.sql
-```
-
-Then import the v1 chat and analytics tables:
+For a new empty database, import one file from the repository root:
 
 ```bash
-mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/migrations/002_chat_analytics.sql
+mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/import_all.sql
 ```
-
-Then import the agent knowledge base tables:
-
-```bash
-mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/migrations/003_agent_knowledge_base.sql
-```
-
-Starter admin:
-
-- Username: `dave`
-- Email: `bigriversocial74@gmail.com`
-- Initial password: `123456`
 
 After logging in, open `/admin/account.php` and update the username, email, full name, and password.
 
@@ -52,10 +34,21 @@ After logging in, open `/admin/account.php` and update the username, email, full
 - Analytics dashboard: `/admin/analytics.php`.
 - Agent knowledge base: `/admin/knowledge.php`.
 - Chat automation can be toggled on or off from the knowledge base page.
+- The selected model provider retrieves knowledge chunks and drafts the chat answer.
 - DOCX text extraction requires PHP ZipArchive.
 - PDF text extraction requires `pdftotext` on the server.
 - Audio and video uploads are stored for a later transcription worker.
 
-## 5. Next security step before production
+## 5. AI provider environment variables
+
+Set the keys and models in server environment variables or in `app/config.php`:
+
+- OpenAI: `OPENAI_API_KEY`, `OPENAI_MODEL`
+- Claude: `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`
+- Gemini: `GEMINI_API_KEY`, `GEMINI_MODEL`
+- Kimi: `KIMI_API_KEY`, `KIMI_MODEL`
+- LiveAvatar: `LIVEAVATAR_API_KEY`, `LIVEAVATAR_ENDPOINT`, `LIVEAVATAR_PROJECT_ID`
+
+## 6. Next security step before production
 
 Before public production use, replace the starter password immediately and wire a secure credential-delivery step or one-time account setup link for customer accounts.
