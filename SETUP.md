@@ -20,6 +20,12 @@ Then import the v1 chat and analytics tables:
 mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/migrations/002_chat_analytics.sql
 ```
 
+Then import the agent knowledge base tables:
+
+```bash
+mysql -u YOUR_DB_USER -p YOUR_DB_NAME < database/migrations/003_agent_knowledge_base.sql
+```
+
 Starter admin:
 
 - Username: `dave`
@@ -38,13 +44,17 @@ After logging in, open `/admin/account.php` and update the username, email, full
 - Forms use CSRF tokens.
 - Login attempts lock after repeated failures.
 
-## 4. Chat and analytics notes
+## 4. Chat, analytics, and agent notes
 
-- The public website loads `assets/chat-widget.js`.
-- Website visits are sent to `/api/track-visit.php`.
-- Chat messages are stored in `chat_conversations` and `chat_messages`.
+- Public website chat widget: `assets/chat-widget.js`.
+- Visit tracking endpoint: `/api/track-visit.php`.
 - Admin chat dashboard: `/admin/chat.php`.
 - Analytics dashboard: `/admin/analytics.php`.
+- Agent knowledge base: `/admin/knowledge.php`.
+- Chat automation can be toggled on or off from the knowledge base page.
+- DOCX text extraction requires PHP ZipArchive.
+- PDF text extraction requires `pdftotext` on the server.
+- Audio and video uploads are stored for a later transcription worker.
 
 ## 5. Next security step before production
 
