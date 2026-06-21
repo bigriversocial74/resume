@@ -23,12 +23,9 @@ function admin_nav_items(): array
     ];
 }
 
-function admin_nav_href(string $href): string
+function admin_nav_clean_path(string $href): string
 {
-    if (str_starts_with($href, '/')) {
-        return app_url($href);
-    }
-    return $href;
+    return strtok($href, '#') ?: $href;
 }
 
 function admin_nav_html(): string
@@ -38,10 +35,10 @@ function admin_nav_html(): string
     foreach (admin_nav_items() as $item) {
         $children = $item['children'] ?? [];
         $href = (string)($item['href'] ?? '#');
-        $isActive = $current === strtok($href, '#');
+        $isActive = $current === admin_nav_clean_path($href);
         if ($children) {
             foreach ($children as $child) {
-                if ($current === strtok((string)$child['href'], '#')) {
+                if ($current === admin_nav_clean_path((string)$child['href'])) {
                     $isActive = true;
                 }
             }
@@ -52,13 +49,13 @@ function admin_nav_html(): string
             $html .= '<div class="admin-subnav">';
             foreach ($children as $child) {
                 $childHref = (string)$child['href'];
-                $childActive = $current === strtok($childHref, '#') ? ' active' : '';
-                $html .= '<a class="admin-subnav-link' . $childActive . '" href="' . e(admin_nav_href($childHref)) . '">' . e((string)$child['label']) . '</a>';
+                $childActive = $current === admin_nav_clean_path($childHref) ? ' active' : '';
+                $html .= '<a class="admin-subnav-link' . $childActive . '" href="' . e($childHref) . '">' . e((string)$child['label']) . '</a>';
             }
             $html .= '</div></div>';
         } else {
             $active = $isActive ? ' active' : '';
-            $html .= '<a class="admin-nav-link' . $active . '" href="' . e(admin_nav_href($href)) . '">' . e((string)$item['label']) . '</a>';
+            $html .= '<a class="admin-nav-link' . $active . '" href="' . e($href) . '">' . e((string)$item['label']) . '</a>';
         }
     }
     return $html;
