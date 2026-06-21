@@ -61,4 +61,12 @@ return [
             ],
         ],
     ],
+    'api_keys' => [
+        'liveavatar' => [
+            'label' => 'LiveAvatar',
+            'api_key' => de_env('LIVEAVATAR_API_KEY'),
+            'endpoint' => de_env('LIVEAVATAR_ENDPOINT'),
+            'project_id' => de_env('LIVEAVATAR_PROJECT_ID'),
+        ],
+    ],
 ];
