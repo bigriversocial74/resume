@@ -8,6 +8,7 @@ function admin_nav_items(): array
         ['/admin/chat.php', 'Chats'],
         ['/admin/analytics.php', 'Analytics'],
         ['/admin/knowledge.php', 'Knowledge'],
+        ['/admin/tavus.php', 'Tavus'],
         ['/admin/customers.php', 'Customers'],
         ['/admin/account.php', 'Account'],
         ['/admin/logout.php', 'Logout'],
