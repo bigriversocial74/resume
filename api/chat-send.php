@@ -11,9 +11,16 @@ try {
     if ($message === '') {
         throw new RuntimeException('Message is required.');
     }
+
     add_chat_message($conversationId, 'visitor', $message, null, ['page_url' => (string)($payload['page_url'] ?? '')]);
-    $autoReply = 'Thanks — I received that. If this is about a new build, you can also use the project questions agent so I have the details ready.';
-    add_chat_message($conversationId, 'system', $autoReply, null, ['auto_reply' => true]);
+
+    if (chat_automation_enabled()) {
+        $reply = knowledge_agent_reply($message);
+        add_chat_message($conversationId, 'system', $reply, null, ['automation' => true, 'knowledge_base' => true]);
+    } else {
+        add_chat_message($conversationId, 'system', 'Thanks — your message was received. Dave will respond from the chat dashboard.', null, ['automation' => false]);
+    }
+
     echo json_encode(['ok' => true, 'conversation_id' => $conversationId, 'messages' => read_chat_messages($conversationId)]);
 } catch (Throwable $e) {
     http_response_code(400);
