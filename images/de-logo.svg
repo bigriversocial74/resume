@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120">
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7dd3fc" />
+      <stop offset="0.55" stop-color="#2563eb" />
+      <stop offset="1" stop-color="#a78bfa" />
+    </linearGradient>
+  </defs>
+  <rect width="320" height="120" rx="26" fill="#050712" />
+  <path d="M36 24h38c23 0 41 16 41 36S97 96 74 96H36V24Zm26 21v30h12c9 0 15-6 15-15s-6-15-15-15H62Z" fill="#ffffff" />
+  <path d="M122 24h84v21h-57v14h52v18h-52v18h59v21h-86V24Z" fill="url(#grad)" />
+  <text x="224" y="52" fill="#f8fafc" font-family="Arial, sans-serif" font-size="20" font-weight="800" letter-spacing="2">DAVID</text>
+  <text x="224" y="78" fill="#94a3b8" font-family="Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="3">EVANS</text>
+</svg>
