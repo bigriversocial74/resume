@@ -62,9 +62,54 @@ function app_config(?string $key = null): mixed
     return $value;
 }
 
+function normalize_app_base_path(?string $path): string
+{
+    $path = '/' . trim((string)$path, '/');
+    return $path === '/' ? '' : $path;
+}
+
+function app_base_path(): string
+{
+    static $basePath = null;
+    if ($basePath !== null) {
+        return $basePath;
+    }
+
+    $baseUrl = (string)(app_config('app.base_url') ?? '');
+    $configuredPath = parse_url($baseUrl, PHP_URL_PATH);
+    if (is_string($configuredPath) && trim($configuredPath, '/') !== '') {
+        $basePath = normalize_app_base_path($configuredPath);
+        return $basePath;
+    }
+
+    $scriptName = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+    foreach (['/admin/', '/customer/', '/api/'] as $marker) {
+        $position = strpos($scriptName, $marker);
+        if ($position !== false) {
+            $basePath = normalize_app_base_path(substr($scriptName, 0, $position));
+            return $basePath;
+        }
+    }
+
+    $dir = dirname($scriptName);
+    $basePath = ($dir && $dir !== '.' && $dir !== '/') ? normalize_app_base_path($dir) : '';
+    return $basePath;
+}
+
+function app_url(string $path = ''): string
+{
+    if ($path !== '' && preg_match('#^https?://#i', $path)) {
+        return $path;
+    }
+
+    $base = app_base_path();
+    $path = '/' . ltrim($path, '/');
+    return $base . $path;
+}
+
 function redirect_to(string $path): never
 {
-    header('Location: ' . $path, true, 302);
+    header('Location: ' . app_url($path), true, 302);
     exit;
 }
 
