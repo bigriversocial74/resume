@@ -118,5 +118,3 @@ function admin_shell_js(): string
 {
     return "(function(){var b=document.querySelector('[data-admin-menu]'),s=document.querySelector('[data-admin-sidebar]'),o=document.querySelector('[data-admin-overlay]');function t(){s&&s.classList.toggle('is-open');o&&o.classList.toggle('is-open')}if(b)b.addEventListener('click',t);if(o)o.addEventListener('click',t);document.querySelectorAll('[data-nav-accordion]').forEach(function(btn){btn.addEventListener('click',function(){var g=btn.closest('[data-nav-group]');if(g)g.classList.toggle('is-open');});});})();";
 }
-CSS;
-}
