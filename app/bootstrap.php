@@ -39,7 +39,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/security.php';
 require_once __DIR__ . '/auth.php';
-require_once __DIR__ . '/crm.php';
+require_once __DIR__ . '/projects.php';
 
 function app_config(?string $key = null): mixed
 {
