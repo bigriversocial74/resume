@@ -58,12 +58,12 @@ function admin_nav_html(): string
             foreach ($children as $child) {
                 $childHref = (string)$child['href'];
                 $childActive = $current === admin_nav_clean_path($childHref) ? ' active' : '';
-                $html .= '<a class="admin-subnav-link' . $childActive . '" href="' . e($childHref) . '">' . e((string)$child['label']) . '</a>';
+                $html .= '<a class="admin-subnav-link' . $childActive . '" href="' . e(app_url($childHref)) . '">' . e((string)$child['label']) . '</a>';
             }
             $html .= '</div></div>';
         } else {
             $active = $isActive ? ' active' : '';
-            $html .= '<a class="admin-nav-link' . $active . '" href="' . e($href) . '"><span class="nav-left"><i>' . e($icon) . '</i><em>' . e((string)$item['label']) . '</em></span></a>';
+            $html .= '<a class="admin-nav-link' . $active . '" href="' . e(app_url($href)) . '"><span class="nav-left"><i>' . e($icon) . '</i><em>' . e((string)$item['label']) . '</em></span></a>';
         }
     }
     return $html;
@@ -87,14 +87,14 @@ function admin_shell_head(string $title): void
 {
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' . e($title) . '</title><style>';
     echo admin_shell_css();
-    echo '</style><link rel="stylesheet" href="/assets/admin-shell-rail.css?v=1"></head><body>';
+    echo '</style><link rel="stylesheet" href="' . e(app_url('/assets/admin-shell-rail.css?v=2')) . '"></head><body>';
 }
 
 function admin_shell_open(string $title, string $kicker, string $heading, string $intro = ''): void
 {
     $userLabel = admin_user_label();
     admin_shell_head($title);
-    echo '<header class="admin-topbar"><div class="admin-top-left"><button class="admin-menu-button" type="button" data-admin-menu>☰</button><a class="admin-logo-lockup" href="/admin/dashboard.php">' . de_logo_html() . '<span>Developer Portal</span></a></div><div class="admin-top-right"><a class="upgrade-link" href="/admin/tavus.php#build">Upgrade Plan</a><details class="user-menu"><summary><span class="avatar-mini">' . e(mb_strtoupper(mb_substr($userLabel, 0, 1))) . '</span><span>' . e($userLabel) . '</span></summary><div class="user-menu-panel"><a href="/admin/account.php">Account Settings</a><a href="/admin/tavus.php#settings">Video Settings</a><a href="/admin/logout.php">Logout</a></div></details></div></header>';
+    echo '<header class="admin-topbar"><div class="admin-top-left"><button class="admin-menu-button" type="button" data-admin-menu>☰</button><a class="admin-logo-lockup" href="' . e(app_url('/admin/dashboard.php')) . '">' . de_logo_html() . '<span>Developer Portal</span></a></div><div class="admin-top-right"><a class="upgrade-link" href="' . e(app_url('/admin/tavus.php#build')) . '">Upgrade Plan</a><details class="user-menu"><summary><span class="avatar-mini">' . e(mb_strtoupper(mb_substr($userLabel, 0, 1))) . '</span><span>' . e($userLabel) . '</span></summary><div class="user-menu-panel"><a href="' . e(app_url('/admin/account.php')) . '">Account Settings</a><a href="' . e(app_url('/admin/tavus.php#settings')) . '">Video Settings</a><a href="' . e(app_url('/admin/logout.php')) . '">Logout</a></div></details></div></header>';
     echo '<div class="admin-overlay" data-admin-overlay></div>';
     echo '<div class="admin-layout"><aside class="admin-sidebar" data-admin-sidebar><nav class="admin-nav">' . admin_nav_html() . '</nav><div class="sidebar-footer"><span>DE</span></div></aside><main class="admin-main">';
     echo '<section class="admin-hero"><div><div class="kicker">' . e($kicker) . '</div><h1>' . e($heading) . '</h1>';
@@ -106,7 +106,7 @@ function admin_shell_open(string $title, string $kicker, string $heading, string
 
 function admin_shell_close(): void
 {
-    echo '</main></div><script>' . admin_shell_js() . '</script><script src="/assets/admin-chat-notifications.js" defer></script></body></html>';
+    echo '</main></div><script>' . admin_shell_js() . '</script><script src="' . e(app_url('/assets/admin-chat-notifications.js?v=2')) . '" defer></script></body></html>';
 }
 
 function admin_shell_css(): string
