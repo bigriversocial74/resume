@@ -23,9 +23,36 @@ function verify_csrf(): void
     }
 }
 
+function de_lower(string $value): string
+{
+    return function_exists('mb_strtolower') ? mb_strtolower($value) : strtolower($value);
+}
+
+function de_upper(string $value): string
+{
+    return function_exists('mb_strtoupper') ? mb_strtoupper($value) : strtoupper($value);
+}
+
+function de_substr(string $value, int $start, ?int $length = null): string
+{
+    if (function_exists('mb_substr')) {
+        return $length === null ? mb_substr($value, $start) : mb_substr($value, $start, $length);
+    }
+    return $length === null ? substr($value, $start) : substr($value, $start, $length);
+}
+
+function de_strimwidth(string $value, int $start, int $width, string $trim = '...'): string
+{
+    if (function_exists('mb_strimwidth')) {
+        return mb_strimwidth($value, $start, $width, $trim);
+    }
+    $slice = substr($value, $start, $width);
+    return strlen($value) > $width ? rtrim($slice) . $trim : $slice;
+}
+
 function normalize_email(string $email): string
 {
-    return mb_strtolower(trim($email));
+    return de_lower(trim($email));
 }
 
 function valid_email(string $email): bool
