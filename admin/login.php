@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $error = 'Invalid login or temporarily locked account.';
     } catch (Throwable $e) {
-        $error = 'Login is not ready yet. Import the upgrade SQL, then refresh this page and try again.';
+        $error = 'Login setup error: ' . $e->getMessage();
     }
 }
 ?>
