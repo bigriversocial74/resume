@@ -24,26 +24,28 @@
 
   const badge = root.querySelector('[data-chat-count]');
   const list = root.querySelector('[data-chat-list]');
-  let lastCount = Number(localStorage.getItem('de_last_chat_count') || '0');
+  let lastSignature = localStorage.getItem('de_admin_chat_signature') || '';
+  let hasPolled = false;
   let audioReady = false;
 
-  function beep() {
+  function playNotice() {
     if (!audioReady) return;
     try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.frequency.value = 740;
-      gain.gain.value = 0.035;
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      setTimeout(() => { osc.stop(); ctx.close(); }, 140);
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new Ctx();
+      const tone = ctx.createOscillator();
+      const volume = ctx.createGain();
+      tone.frequency.value = 820;
+      volume.gain.value = 0.04;
+      tone.connect(volume);
+      volume.connect(ctx.destination);
+      tone.start();
+      setTimeout(() => { tone.stop(); ctx.close(); }, 160);
     } catch (e) {}
   }
 
   document.addEventListener('click', () => { audioReady = true; }, { once: true });
+  document.addEventListener('keydown', () => { audioReady = true; }, { once: true });
 
   async function poll() {
     try {
@@ -51,24 +53,27 @@
       const data = await res.json();
       if (!data.ok) return;
       const count = Number(data.count || 0);
+      const items = data.items || [];
+      const signature = items.map((item) => item.signature || `${item.id}:${item.unread}:${item.last_at}`).join('|');
       badge.textContent = String(count);
       badge.hidden = count <= 0;
       root.classList.toggle('has-alerts', count > 0);
       list.innerHTML = '';
-      if (!data.items || data.items.length === 0) {
+      if (!items.length) {
         list.innerHTML = '<div class="admin-chat-alert-empty">No new chats.</div>';
       } else {
-        data.items.forEach((item) => {
+        items.forEach((item) => {
           const a = document.createElement('a');
           a.className = 'admin-chat-alert-item';
           a.href = appUrl(item.url || `/admin/chat-thread.php?id=${Number(item.id || 0)}`);
-          a.innerHTML = `<strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.last_message || 'New message')}</span><em>Accept chat →</em>`;
+          a.innerHTML = `<strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.last_message || 'New message')}</span><em>${Number(item.unread || 0)} unread · Accept chat →</em>`;
           list.appendChild(a);
         });
       }
-      if (count > lastCount) beep();
-      lastCount = count;
-      localStorage.setItem('de_last_chat_count', String(count));
+      if (hasPolled && count > 0 && signature && signature !== lastSignature) playNotice();
+      hasPolled = true;
+      lastSignature = signature;
+      localStorage.setItem('de_admin_chat_signature', signature);
     } catch (e) {}
   }
 
@@ -77,5 +82,5 @@
   }
 
   poll();
-  setInterval(poll, 5000);
+  setInterval(poll, 3500);
 })();
