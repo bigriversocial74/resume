@@ -69,7 +69,7 @@ admin_shell_open('Chat Thread', 'Live Chat', $conversation['name'] ?: $conversat
 <?php if ($error): ?><div class="err"><?= e($error) ?></div><?php endif; ?>
 <section class="chat-workspace" data-conversation-id="<?= (int)$id ?>">
     <div class="chat-frame">
-        <div class="chat-head"><div><strong><?= e($conversation['name'] ?: $conversation['email'] ?: 'Website visitor') ?></strong><br><span>Status: <span data-chat-status><?= e($conversation['status']) ?></span></span></div><a class="btn dark" href="/admin/chat.php">All chats</a></div>
+        <div class="chat-head"><div><strong><?= e($conversation['name'] ?: $conversation['email'] ?: 'Website visitor') ?></strong><br><span>Status: <span data-chat-status><?= e($conversation['status']) ?></span></span></div><a class="btn dark" href="<?= e(app_url('/admin/chat.php')) ?>">All chats</a></div>
         <div class="chat-canvas" data-chat-canvas><?php foreach ($messages as $row): ?><div class="msg <?= e($row['sender_type']) ?>"><div class="meta"><?= e($row['sender_type']) ?><?= $row['sender_name'] ? ' · ' . e($row['sender_name']) : '' ?> · <?= e($row['created_at']) ?></div><?= nl2br(e($row['message'])) ?></div><?php endforeach; ?></div>
         <div class="chat-composer"><form method="post" class="composer-form" data-chat-reply-form><?= csrf_field() ?><input type="hidden" name="conversation_id" value="<?= (int)$id ?>"><input type="hidden" name="action" value="reply"><input type="hidden" name="ajax" value="1"><textarea name="message" placeholder="Write a reply..." required></textarea><button class="btn" type="submit">Send</button></form></div>
     </div>
@@ -78,14 +78,13 @@ admin_shell_open('Chat Thread', 'Live Chat', $conversation['name'] ?: $conversat
         <section class="side-card"><h2>Status</h2><form method="post"><?= csrf_field() ?><input type="hidden" name="conversation_id" value="<?= (int)$id ?>"><input type="hidden" name="action" value="status"><select class="select" name="status"><option value="open" <?= $conversation['status']==='open'?'selected':'' ?>>Open</option><option value="pending" <?= $conversation['status']==='pending'?'selected':'' ?>>Pending</option><option value="closed" <?= $conversation['status']==='closed'?'selected':'' ?>>Closed</option><option value="archived" <?= $conversation['status']==='archived'?'selected':'' ?>>Archived</option></select><p><button class="btn" type="submit">Update</button></p></form></section>
     </aside>
 </section>
-<script src="/assets/admin-chat-notifications.js" defer></script>
 <script>
 (function(){
-const root=document.querySelector('[data-conversation-id]');if(!root)return;const id=root.dataset.conversationId;const canvas=root.querySelector('[data-chat-canvas]');const form=root.querySelector('[data-chat-reply-form]');let lastHtml='';
+const appBase=<?= json_encode(app_base_path()) ?>;const appUrl=p=>appBase+p;const root=document.querySelector('[data-conversation-id]');if(!root)return;const id=root.dataset.conversationId;const canvas=root.querySelector('[data-chat-canvas]');const form=root.querySelector('[data-chat-reply-form]');let lastHtml='';
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function render(messages){const html=messages.map(m=>`<div class="msg ${esc(m.sender_type)}"><div class="meta">${esc(m.sender_type)}${m.sender_name?' · '+esc(m.sender_name):''} · ${esc(m.created_at)}</div>${esc(m.message).replace(/\n/g,'<br>')}</div>`).join('');if(html!==lastHtml){const nearBottom=canvas.scrollTop+canvas.clientHeight>=canvas.scrollHeight-80;canvas.innerHTML=html;lastHtml=html;if(nearBottom)canvas.scrollTop=canvas.scrollHeight;}}
-async function poll(){try{const r=await fetch(`/admin/chat-thread.php?id=${encodeURIComponent(id)}&ajax=1`);const d=await r.json();if(d.ok){render(d.messages||[]);if(d.conversation&&d.conversation.status){document.querySelector('[data-chat-status]').textContent=d.conversation.status;}}}catch(e){}}
-form.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(form);const ta=form.querySelector('textarea');if(!ta.value.trim())return;try{const r=await fetch('/admin/chat-thread.php?id='+encodeURIComponent(id),{method:'POST',body:fd});const d=await r.json();if(d.ok){ta.value='';render(d.messages||[]);canvas.scrollTop=canvas.scrollHeight;}}catch(err){form.submit();}});
+async function poll(){try{const r=await fetch(appUrl(`/admin/chat-thread.php?id=${encodeURIComponent(id)}&ajax=1`));const d=await r.json();if(d.ok){render(d.messages||[]);if(d.conversation&&d.conversation.status){document.querySelector('[data-chat-status]').textContent=d.conversation.status;}}}catch(e){}}
+form.addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(form);const ta=form.querySelector('textarea');if(!ta.value.trim())return;try{const r=await fetch(appUrl('/admin/chat-thread.php?id='+encodeURIComponent(id)),{method:'POST',body:fd});const d=await r.json();if(d.ok){ta.value='';render(d.messages||[]);canvas.scrollTop=canvas.scrollHeight;}}catch(err){form.submit();}});
 canvas.scrollTop=canvas.scrollHeight;poll();setInterval(poll,2500);
 })();
 </script>
