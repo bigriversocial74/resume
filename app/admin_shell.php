@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-function app_url(string $path): string
-{
-    return $path;
+if (!function_exists('app_url')) {
+    function app_url(string $path): string
+    {
+        return $path;
+    }
 }
 
 function admin_nav_items(): array
