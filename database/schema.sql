@@ -1,7 +1,8 @@
--- David Evans CRM foundation
+-- David Evans CRM / Portfolio Admin consolidated fresh-install schema
 -- MySQL 8+ / MariaDB 10.4+
--- Fresh install file: import this single file into an empty database.
--- Includes CRM, users, project requests, chat, analytics, knowledge base, AI settings, Tavus video chat, media profiles, and starter admin.
+-- Import this single file into an EMPTY database for a clean install.
+-- This file already includes all current migrations folded into the final table definitions.
+-- Do not import separate migration files after this file on a fresh install.
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -103,10 +104,15 @@ CREATE TABLE website_visits (
   referrer VARCHAR(700) NULL,
   user_agent VARCHAR(255) NULL,
   ip_hash CHAR(64) NULL,
+  started_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_ping_at DATETIME NULL,
+  ended_at DATETIME NULL,
+  time_on_page_seconds INT UNSIGNED NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_website_visits_created (created_at),
   INDEX idx_website_visits_visitor_created (visitor_key, created_at),
-  INDEX idx_website_visits_session_created (session_key, created_at)
+  INDEX idx_website_visits_session_created (session_key, created_at),
+  INDEX idx_website_visits_ip_created (ip_hash, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE chat_conversations (
@@ -117,11 +123,29 @@ CREATE TABLE chat_conversations (
   status ENUM('open','pending','closed','archived') NOT NULL DEFAULT 'open',
   assigned_to_user_id BIGINT UNSIGNED NULL,
   linked_project_request_id BIGINT UNSIGNED NULL,
+  ip_hash CHAR(64) NULL,
+  user_agent VARCHAR(255) NULL,
+  first_page_url VARCHAR(700) NULL,
+  last_page_url VARCHAR(700) NULL,
+  referrer VARCHAR(700) NULL,
+  total_time_on_site_seconds INT UNSIGNED NOT NULL DEFAULT 0,
+  last_seen_at DATETIME NULL,
   last_message_at DATETIME NULL,
+  last_visitor_message_at DATETIME NULL,
+  last_admin_message_at DATETIME NULL,
+  accepted_at DATETIME NULL,
+  fallback_sent_at DATETIME NULL,
+  visitor_notified_at DATETIME NULL,
+  admin_last_read_at DATETIME NULL,
+  visitor_last_read_at DATETIME NULL,
+  unread_admin_count INT UNSIGNED NOT NULL DEFAULT 0,
+  unread_visitor_count INT UNSIGNED NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_chat_conversations_status_last (status, last_message_at),
   INDEX idx_chat_conversations_visitor (visitor_key),
+  INDEX idx_chat_conversations_unread_admin (unread_admin_count, last_visitor_message_at),
+  INDEX idx_chat_conversations_ip_created (ip_hash, created_at),
   CONSTRAINT fk_chat_conversations_assigned FOREIGN KEY (assigned_to_user_id) REFERENCES users(id) ON DELETE SET NULL,
   CONSTRAINT fk_chat_conversations_project FOREIGN KEY (linked_project_request_id) REFERENCES project_requests(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -133,8 +157,11 @@ CREATE TABLE chat_messages (
   sender_user_id BIGINT UNSIGNED NULL,
   message TEXT NOT NULL,
   metadata JSON NULL,
+  seen_by_admin_at DATETIME NULL,
+  seen_by_visitor_at DATETIME NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_chat_messages_conversation_created (conversation_id, created_at),
+  INDEX idx_chat_messages_sender_created (sender_type, created_at),
   CONSTRAINT fk_chat_messages_conversation FOREIGN KEY (conversation_id) REFERENCES chat_conversations(id) ON DELETE CASCADE,
   CONSTRAINT fk_chat_messages_user FOREIGN KEY (sender_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -229,8 +256,8 @@ CREATE TABLE video_conversations (
   INDEX idx_video_conversations_provider_id (provider_conversation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO users (email, username, password_hash, full_name, role, status, must_change_password, created_at, updated_at)
-VALUES ('bigriversocial74@gmail.com','dave','$2y$12$SgOrPOsThvL1Yyx2VjacY.DsxWB79LXyb.58muwr48DHic/3NAH/S','Dave','admin','active',1,NOW(),NOW());
+INSERT INTO users (email, username, password_hash, full_name, role, status, must_change_password, failed_login_count, created_at, updated_at)
+VALUES ('bigriversocial74@gmail.com','dave','$2y$12$SgOrPOsThvL1Yyx2VjacY.DsxWB79LXyb.58muwr48DHic/3NAH/S','Dave','admin','active',1,0,NOW(),NOW());
 
 INSERT INTO agent_settings (setting_key, setting_value, updated_at) VALUES
 ('chat_automation_enabled','0',NOW()),
