@@ -1,20 +1,28 @@
 <?php
 require_once __DIR__ . '/../app/bootstrap.php';
 
-$existing = current_user();
-if ($existing) {
-    redirect_to($existing['role'] === 'admin' ? '/admin/dashboard.php' : '/customer/dashboard.php');
+try {
+    $existing = current_user();
+    if ($existing) {
+        redirect_to($existing['role'] === 'admin' ? '/admin/dashboard.php' : '/customer/dashboard.php');
+    }
+} catch (Throwable $e) {
+    logout_user();
 }
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    verify_csrf();
-    $ok = authenticate((string)($_POST['email'] ?? ''), (string)($_POST['password'] ?? ''));
-    if ($ok) {
-        $user = current_user();
-        redirect_to(($user && $user['role'] === 'admin') ? '/admin/dashboard.php' : '/customer/dashboard.php');
+    try {
+        verify_csrf();
+        $ok = authenticate((string)($_POST['email'] ?? ''), (string)($_POST['password'] ?? ''));
+        if ($ok) {
+            $user = current_user();
+            redirect_to(($user && $user['role'] === 'admin') ? '/admin/dashboard.php' : '/customer/dashboard.php');
+        }
+        $error = 'Invalid login or temporarily locked account.';
+    } catch (Throwable $e) {
+        $error = 'Login is not ready yet. Import the upgrade SQL, then refresh this page and try again.';
     }
-    $error = 'Invalid login or temporarily locked account.';
 }
 ?>
 <!DOCTYPE html>
