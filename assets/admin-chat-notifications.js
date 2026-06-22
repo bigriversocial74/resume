@@ -1,6 +1,11 @@
 (() => {
   const topRight = document.querySelector('.admin-top-right');
   if (!topRight) return;
+
+  const scriptUrl = new URL(document.currentScript?.src || 'assets/admin-chat-notifications.js', window.location.href);
+  const appBasePath = scriptUrl.pathname.replace(/\/assets\/admin-chat-notifications\.js(?:\?.*)?$/, '').replace(/\/$/, '');
+  const appUrl = (path) => `${appBasePath}${path.startsWith('/') ? path : `/${path}`}` || '/';
+
   if (!document.querySelector('#de-admin-chat-alert-styles')) {
     const style = document.createElement('style');
     style.id = 'de-admin-chat-alert-styles';
@@ -42,7 +47,7 @@
 
   async function poll() {
     try {
-      const res = await fetch('/api/chat-notifications.php', { headers: { 'Accept': 'application/json' }});
+      const res = await fetch(appUrl('/api/chat-notifications.php'), { headers: { 'Accept': 'application/json' }});
       const data = await res.json();
       if (!data.ok) return;
       const count = Number(data.count || 0);
@@ -56,7 +61,7 @@
         data.items.forEach((item) => {
           const a = document.createElement('a');
           a.className = 'admin-chat-alert-item';
-          a.href = item.url;
+          a.href = appUrl(item.url || `/admin/chat-thread.php?id=${Number(item.id || 0)}`);
           a.innerHTML = `<strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.last_message || 'New message')}</span><em>Accept chat →</em>`;
           list.appendChild(a);
         });
